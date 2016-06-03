@@ -24,13 +24,22 @@ Or install it yourself as:
 Currently this gem supports the production of spec tests for activemodel Models and routing specs.
 
 To produce all possible tests, run:
-* SpecProducer.produce_specs_for_all_types
+
+```ruby
+SpecProducer.produce_specs_for_all_types
+```
 
 To produce all tests for models, run:
-* SpecProducer.produce_specs_for_models
+
+```ruby
+SpecProducer.produce_specs_for_models
+```
 
 To produce all tests for routes, run:
-* SpecProducer.produce_specs_for_routes
+
+```ruby
+SpecProducer.produce_specs_for_routes
+```
 
 ## Development
 
