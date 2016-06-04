@@ -1,3 +1,12 @@
+## 0.2.0 (2016-06-04)
+
+Features:
+* Added print_missing_model_specs to print all the missing tests that refer to Models
+* Added print_missing_controller_specs to print all the missing tests that refer to Controllers
+* Added print_missing_helper_specs to print all the missing tests that refer to Helpers
+* Added print_missing_view_specs to print all the missing tests that refer to Views
+* Added print_all_missing_spec_files to print the missing tests for all types covered with single methods.
+
 ## 0.1.0 (2016-06-04)
 
 Features:
