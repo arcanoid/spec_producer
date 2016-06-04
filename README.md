@@ -42,6 +42,39 @@ To produce all tests for routes, run:
 SpecProducer.produce_specs_for_routes
 ```
 
+Additionally this gem (from version 0.2.0) allows users to print all their missing spec files by reading all 
+directories for Views, Models, Controllers and Helpers.
+
+To print all types of missing tests, run:
+
+```ruby
+SpecProducer.print_all_missing_spec_files
+```
+
+To print all missing model tests, run:
+
+```ruby
+SpecProducer.print_missing_model_specs
+```
+
+To print all missing controller tests, run:
+
+```ruby
+SpecProducer.print_missing_controller_specs
+```
+
+To print all missing helper tests, run:
+
+```ruby
+SpecProducer.print_missing_helper_specs
+```
+
+To print all missing view tests, run:
+
+```ruby
+SpecProducer.print_missing_view_specs
+```
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
