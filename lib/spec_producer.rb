@@ -19,6 +19,26 @@ module SpecProducer
         final_text << "\tit { should respond_to :#{attribute}, :#{attribute}= }\n"
       end
 
+      descendant.validators.each do |validator|
+        if validator.kind == :presence
+          validator.attributes.each do |attribute|
+            final_text << "\tit { should validate_presence_of :#{attribute} }\n"
+          end
+        elsif validator.kind == :uniqueness
+          validator.attributes.each do |attribute|
+            final_text << "\tit { should validate_uniqueness_of :#{attribute} }\n"
+          end
+        elsif validator.kind == :numericality
+          validator.attributes.each do |attribute|
+            final_text << "\tit { should validate_numericality_of :#{attribute} }\n"
+          end
+        elsif validator.kind == :acceptance
+          validator.attributes.each do |attribute|
+            final_text << "\tit { should validate_acceptance_of :#{attribute} }\n"
+          end
+        end
+      end
+
       final_text << "end"
 
       if File.exists?(Rails.root.join("spec/models/#{descendant.name.downcase}_spec.rb"))
