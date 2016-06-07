@@ -12,7 +12,7 @@ module SpecProducer
     end
 
     ActiveRecord::Base.descendants.each do |descendant|
-      final_text = "require 'rails_helper'\n"
+      final_text = "require 'rails_helper'\n\n"
       final_text << "describe #{descendant.name} do\n"
 
       descendant.attribute_names.each do |attribute|
@@ -87,11 +87,11 @@ module SpecProducer
         final_text << "\t\t\tshould route_to(:controller => '#{route[:controller]}',\n"
 
         /:[a-zA-Z_]+/.match(route[:path]).to_a.each do |parameter|
-          final_text << "\t\t\t\t\t#{parameter} => '#{parameter.gsub(':','').upcase}',\n"
+          final_text << "\t\t\t\t\t\t\t#{parameter} => '#{parameter.gsub(':','').upcase}',\n"
         end
 
         final_text << "\t\t\t\t\t:action => '#{route[:action]}')\n"
-        final_text << "\t\tend\n\n"
+        final_text << "\tend\n\n"
       end
 
       final_text << 'end'
