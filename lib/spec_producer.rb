@@ -6,6 +6,7 @@ module SpecProducer
     produce_specs_for_routes
     produce_specs_for_views
     produce_specs_for_controllers
+    produce_specs_for_helpers
   end
 
   def self.produce_specs_for_models
@@ -152,6 +153,37 @@ module SpecProducer
       final_text << "\tend\n\n"
       final_text << "\tpending 'view content test'\n"
       final_text << "end\n"
+
+      unless FileTest.exists?(file_name)
+        f = File.open(file_name, 'wb+')
+        f.write(final_text)
+        f.close
+      end
+    end
+
+    nil
+  end
+
+  def self.produce_specs_for_helpers
+    files_list = Dir["app/helpers/**/*.rb"]
+
+    files_list.each do |file|
+      full_path = 'spec'
+      File.dirname(file.gsub('app/', 'spec/')).split('/').reject { |path| path == 'spec' }.each do |path|
+        unless /.*\.rb/.match path
+          full_path << "/#{path}"
+
+          unless Dir.exists? full_path
+            Dir.mkdir(Rails.root.join(full_path))
+          end
+        end
+      end
+
+      file_name = "#{file.gsub('app/', 'spec/').gsub('.rb', '')}_spec.rb"
+      final_text = "require 'rails_helper'\n\n"
+      final_text << "describe #{File.basename(file, ".rb").camelcase} do\n"
+      final_text << "\tpending 'view helper tests'\n"
+      final_text << "end"
 
       unless FileTest.exists?(file_name)
         f = File.open(file_name, 'wb+')
