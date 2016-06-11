@@ -36,7 +36,15 @@ module SpecProducer
           validator.attributes.each do |attribute|
             final_text << "\tit { should validate_acceptance_of :#{attribute} }\n"
           end
+        elsif validator.kind == :confirmation
+          validator.attributes.each do |attribute|
+            final_text << "\tit { should validate_confirmation_of :#{attribute} }\n"
+          end
         end
+      end
+
+      descendant.column_names.each do |column_name|
+        final_text << "\tit { should have_db_column :#{column_name} }\n"
       end
 
       final_text << "end"
