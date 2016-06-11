@@ -4,6 +4,7 @@ module SpecProducer
   def self.produce_specs_for_all_types
     produce_specs_for_models
     produce_specs_for_routes
+    produce_specs_for_views
   end
 
   def self.produce_specs_for_models
@@ -119,6 +120,41 @@ module SpecProducer
         path = "spec/routing/#{route_group[0]}_routing_spec.rb"
         puts "Creating spec file for #{route_group[0]}"
         f = File.open("#{Rails.root.join(path)}", 'wb+')
+        f.write(final_text)
+        f.close
+      end
+    end
+
+    nil
+  end
+
+  def self.produce_specs_for_views
+    files_list = Dir["app/views/**/*.erb"]
+
+    files_list.each do |file|
+
+      full_path = 'spec'
+      File.dirname(file.gsub('app/', 'spec/')).split('/').reject { |path| path == 'spec' }.each do |path|
+        unless /.*\.erb/.match path
+          full_path << "/#{path}"
+
+          unless Dir.exists? full_path
+            Dir.mkdir(Rails.root.join(full_path))
+          end
+        end
+      end
+
+      file_name = "#{file.gsub('app/', 'spec/')}_spec.rb"
+      final_text = "require 'rails_helper'\n\n"
+      final_text << "describe '#{file.gsub('app/views/', '')}' do\n"
+      final_text << "\tbefore do\n"
+      final_text << "\t\trender\n"
+      final_text << "\tend\n\n"
+      final_text << "\tpending 'view content test'\n"
+      final_text << "end\n"
+
+      unless FileTest.exists?(file_name)
+        f = File.open(file_name, 'wb+')
         f.write(final_text)
         f.close
       end
