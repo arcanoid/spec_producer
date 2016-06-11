@@ -5,6 +5,7 @@ module SpecProducer
     produce_specs_for_models
     produce_specs_for_routes
     produce_specs_for_views
+    produce_specs_for_controllers
   end
 
   def self.produce_specs_for_models
@@ -132,7 +133,6 @@ module SpecProducer
     files_list = Dir["app/views/**/*.erb"]
 
     files_list.each do |file|
-
       full_path = 'spec'
       File.dirname(file.gsub('app/', 'spec/')).split('/').reject { |path| path == 'spec' }.each do |path|
         unless /.*\.erb/.match path
@@ -151,6 +151,52 @@ module SpecProducer
       final_text << "\t\trender\n"
       final_text << "\tend\n\n"
       final_text << "\tpending 'view content test'\n"
+      final_text << "end\n"
+
+      unless FileTest.exists?(file_name)
+        f = File.open(file_name, 'wb+')
+        f.write(final_text)
+        f.close
+      end
+    end
+
+    nil
+  end
+
+  def self.produce_specs_for_controllers
+    Dir.glob(Rails.root.join('app/controllers/*.rb')).each do |x|
+      require x
+    end
+
+    controllers = ApplicationController.descendants
+    controllers << ApplicationController
+
+    controllers.each do |descendant|
+      path_name = 'app/controllers/' + descendant.name.split('::').map { |name| name.underscore }.join('/')
+
+      full_path = 'spec'
+      File.dirname(path_name.gsub('app/', 'spec/')).split('/').reject { |path| path == 'spec' }.each do |path|
+        unless /.*\.rb/.match path
+          full_path << "/#{path}"
+
+          unless Dir.exists? full_path
+            Dir.mkdir(Rails.root.join(full_path))
+          end
+        end
+      end
+
+      file_name = "#{path_name.gsub('app/', 'spec/')}_spec.rb"
+      final_text = "require 'rails_helper'\n\n"
+      final_text << "describe #{descendant.name} do\n"
+
+      descendant.action_methods.each do |method|
+        final_text << "\tpending '##{method}'\n"
+      end
+
+      unless descendant.action_methods.size > 0
+        final_text << "\tpending 'tests'\n"
+      end
+
       final_text << "end\n"
 
       unless FileTest.exists?(file_name)
