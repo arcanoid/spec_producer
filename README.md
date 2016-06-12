@@ -42,6 +42,25 @@ To produce all tests for routes, run:
 SpecProducer.produce_specs_for_routes
 ```
 
+To produce all spec files for views, run:
+
+```ruby
+SpecProducer.produce_specs_for_views
+```
+```
+
+To produce all spec files for helpers, run:
+
+```ruby
+SpecProducer.produce_specs_for_helpers
+```
+
+To produce all spec files for controllers, run:
+
+```ruby
+SpecProducer.produce_specs_for_controllers
+```
+
 Additionally this gem (from version 0.2.0) allows users to print all their missing spec files by reading all 
 directories for Views, Models, Controllers and Helpers.
 
