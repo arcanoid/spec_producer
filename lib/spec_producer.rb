@@ -25,6 +25,11 @@ module SpecProducer
       descendant.readonly_attributes.each do |attribute|
         final_text << "\tit { should have_readonly_attribute :#{attribute} }\n"
       end
+
+      if descendant.validators.reject { |validator| validator.kind == :associated }.present?
+        final_text << "\n\t# Validators\n"
+      end
+
       descendant.validators.each do |validator|
         if validator.kind == :presence
           validator.attributes.each do |attribute|
@@ -45,6 +50,14 @@ module SpecProducer
         elsif validator.kind == :confirmation
           validator.attributes.each do |attribute|
             final_text << "\tit { should validate_confirmation_of :#{attribute} }\n"
+          end
+        elsif validator.kind == :length
+          validator.attributes.each do |attribute|
+            final_text << "\tit { should validate_length_of :#{attribute} }\n"
+          end
+        elsif validator.kind == :absence
+          validator.attributes.each do |attribute|
+            final_text << "\tit { should validate_absence_of :#{attribute} }\n"
           end
         end
       end
