@@ -62,6 +62,10 @@ module SpecProducer
         end
       end
 
+      if descendant.column_names.present?
+        final_text << "\n\t# Columns\n"
+      end
+
       descendant.column_names.each do |column_name|
         final_text << "\tit { should have_db_column :#{column_name} }\n"
       end
