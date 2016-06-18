@@ -70,6 +70,18 @@ module SpecProducer
         final_text << "\tit { should have_db_column :#{column_name} }\n"
       end
 
+      if descendant.reflections.keys.present?
+        final_text << "\n\t# Associations\n"
+      end
+
+      descendant.reflections.keys.each do |key|
+        final_text << case descendant.reflections[key].macro
+          when :belongs_to then "\tit { should belong_to :#{key} }\n"
+          when :has_one then "\tit { should have_one :#{key} }\n"
+          when :has_many then "\tit { should have_many :#{key} }\n"
+        end
+      end
+
       final_text << "end"
 
       if File.exists?(Rails.root.join("spec/models/#{descendant.name.downcase}_spec.rb"))
