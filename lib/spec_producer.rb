@@ -22,6 +22,9 @@ module SpecProducer
         final_text << "\tit { should respond_to :#{attribute}, :#{attribute}= }\n"
       end
 
+      descendant.readonly_attributes.each do |attribute|
+        final_text << "\tit { should have_readonly_attribute :#{attribute} }\n"
+      end
       descendant.validators.each do |validator|
         if validator.kind == :presence
           validator.attributes.each do |attribute|
