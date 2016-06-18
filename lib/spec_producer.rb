@@ -79,6 +79,7 @@ module SpecProducer
           when :belongs_to then "\tit { should belong_to :#{key} }\n"
           when :has_one then "\tit { should have_one :#{key} }\n"
           when :has_many then "\tit { should have_many :#{key} }\n"
+          when :has_and_belongs_to_many then "\tit { should have_and_belong_to_many :#{key} }\n"
         end
       end
 
