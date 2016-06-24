@@ -19,67 +19,67 @@ module SpecProducer
       final_text << "describe #{descendant.name} do\n"
 
       descendant.attribute_names.each do |attribute|
-        final_text << "\tit { should respond_to :#{attribute}, :#{attribute}= }\n"
+        final_text << "  it { should respond_to :#{attribute}, :#{attribute}= }\n"
       end
 
       descendant.readonly_attributes.each do |attribute|
-        final_text << "\tit { should have_readonly_attribute :#{attribute} }\n"
+        final_text << "  it { should have_readonly_attribute :#{attribute} }\n"
       end
 
       if descendant.validators.reject { |validator| validator.kind == :associated }.present?
-        final_text << "\n\t# Validators\n"
+        final_text << "\n  # Validators\n"
       end
 
       descendant.validators.each do |validator|
         if validator.kind == :presence
           validator.attributes.each do |attribute|
-            final_text << "\tit { should validate_presence_of :#{attribute} }\n"
+            final_text << "  it { should validate_presence_of :#{attribute} }\n"
           end
         elsif validator.kind == :uniqueness
           validator.attributes.each do |attribute|
-            final_text << "\tit { should validate_uniqueness_of :#{attribute} }\n"
+            final_text << "  it { should validate_uniqueness_of :#{attribute} }\n"
           end
         elsif validator.kind == :numericality
           validator.attributes.each do |attribute|
-            final_text << "\tit { should validate_numericality_of :#{attribute} }\n"
+            final_text << "  it { should validate_numericality_of :#{attribute} }\n"
           end
         elsif validator.kind == :acceptance
           validator.attributes.each do |attribute|
-            final_text << "\tit { should validate_acceptance_of :#{attribute} }\n"
+            final_text << "  it { should validate_acceptance_of :#{attribute} }\n"
           end
         elsif validator.kind == :confirmation
           validator.attributes.each do |attribute|
-            final_text << "\tit { should validate_confirmation_of :#{attribute} }\n"
+            final_text << "  it { should validate_confirmation_of :#{attribute} }\n"
           end
         elsif validator.kind == :length
           validator.attributes.each do |attribute|
-            final_text << "\tit { should validate_length_of :#{attribute} }\n"
+            final_text << "  it { should validate_length_of :#{attribute} }\n"
           end
         elsif validator.kind == :absence
           validator.attributes.each do |attribute|
-            final_text << "\tit { should validate_absence_of :#{attribute} }\n"
+            final_text << "  it { should validate_absence_of :#{attribute} }\n"
           end
         end
       end
 
       if descendant.column_names.present?
-        final_text << "\n\t# Columns\n"
+        final_text << "\n  # Columns\n"
       end
 
       descendant.column_names.each do |column_name|
-        final_text << "\tit { should have_db_column :#{column_name} }\n"
+        final_text << "  it { should have_db_column :#{column_name} }\n"
       end
 
       if descendant.reflections.keys.present?
-        final_text << "\n\t# Associations\n"
+        final_text << "\n  # Associations\n"
       end
 
       descendant.reflections.keys.each do |key|
         final_text << case descendant.reflections[key].macro
-          when :belongs_to then "\tit { should belong_to :#{key} }\n"
-          when :has_one then "\tit { should have_one :#{key} }\n"
-          when :has_many then "\tit { should have_many :#{key} }\n"
-          when :has_and_belongs_to_many then "\tit { should have_and_belong_to_many :#{key} }\n"
+          when :belongs_to then "  it { should belong_to :#{key} }\n"
+          when :has_one then "  it { should have_one :#{key} }\n"
+          when :has_many then "  it { should have_many :#{key} }\n"
+          when :has_and_belongs_to_many then "  it { should have_and_belong_to_many :#{key} }\n"
         end
       end
 
@@ -125,17 +125,17 @@ module SpecProducer
       final_text << "describe '#{route_group[0]} routes' do\n"
 
       route_group[1].each do |route|
-        final_text << "\tit \"#{route[:verb].upcase} #{route[:path]} should route to '#{route[:controller]}##{route[:action]}'\" do\n"
+        final_text << "  it \"#{route[:verb].upcase} #{route[:path]} should route to '#{route[:controller]}##{route[:action]}'\" do\n"
 
-        final_text << "\t\t{ :#{route[:verb]} => '#{route[:path].gsub(/:[a-zA-Z_]+/){ |param| param.gsub(':','').upcase }}'}.\n"
-        final_text << "\t\t\tshould route_to(:controller => '#{route[:controller]}',\n"
+        final_text << "    { :#{route[:verb]} => '#{route[:path].gsub(/:[a-zA-Z_]+/){ |param| param.gsub(':','').upcase }}'}.\n"
+        final_text << "      should route_to(:controller => '#{route[:controller]}',\n"
 
         /:[a-zA-Z_]+/.match(route[:path]).to_a.each do |parameter|
-          final_text << "\t\t\t\t\t\t\t#{parameter} => '#{parameter.gsub(':','').upcase}',\n"
+          final_text << "              #{parameter} => '#{parameter.gsub(':','').upcase}',\n"
         end
 
-        final_text << "\t\t\t\t\t:action => '#{route[:action]}')\n"
-        final_text << "\tend\n\n"
+        final_text << "          :action => '#{route[:action]}')\n"
+        final_text << "  end\n\n"
       end
 
       final_text << 'end'
@@ -181,10 +181,10 @@ module SpecProducer
       file_name = "#{file.gsub('app/', 'spec/')}_spec.rb"
       final_text = "require 'rails_helper'\n\n"
       final_text << "describe '#{file.gsub('app/views/', '')}' do\n"
-      final_text << "\tbefore do\n"
-      final_text << "\t\trender\n"
-      final_text << "\tend\n\n"
-      final_text << "\tpending 'view content test'\n"
+      final_text << "  before do\n"
+      final_text << "    render\n"
+      final_text << "  end\n\n"
+      final_text << "  pending 'view content test'\n"
       final_text << "end\n"
 
       unless FileTest.exists?(file_name)
@@ -215,7 +215,7 @@ module SpecProducer
       file_name = "#{file.gsub('app/', 'spec/').gsub('.rb', '')}_spec.rb"
       final_text = "require 'rails_helper'\n\n"
       final_text << "describe #{File.basename(file, ".rb").camelcase} do\n"
-      final_text << "\tpending 'view helper tests'\n"
+      final_text << "  pending 'view helper tests'\n"
       final_text << "end"
 
       unless FileTest.exists?(file_name)
@@ -255,11 +255,11 @@ module SpecProducer
       final_text << "describe #{descendant.name} do\n"
 
       descendant.action_methods.each do |method|
-        final_text << "\tpending '##{method}'\n"
+        final_text << "  pending '##{method}'\n"
       end
 
       unless descendant.action_methods.size > 0
-        final_text << "\tpending 'tests'\n"
+        final_text << "  pending 'tests'\n"
       end
 
       final_text << "end\n"
