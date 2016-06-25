@@ -47,7 +47,6 @@ To produce all spec files for views, run:
 ```ruby
 SpecProducer.produce_specs_for_views
 ```
-```
 
 To produce all spec files for helpers, run:
 
