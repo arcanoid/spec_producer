@@ -85,9 +85,9 @@ module SpecProducer
 
       final_text << "end"
 
-      if File.exists?(Rails.root.join("spec/models/#{descendant.name.downcase}_spec.rb"))
+      if File.exists?(Rails.root.join("spec/models/#{descendant.name.underscore}_spec.rb"))
         puts '#'*100
-        puts "Please, check whether the following lines are included in: " + descendant.name.downcase + "_spec.rb\n"
+        puts "Please, check whether the following lines are included in: " + descendant.name.underscore + "_spec.rb\n"
         puts '#'*100
         puts "\n"
         puts final_text
@@ -97,7 +97,7 @@ module SpecProducer
           Dir.mkdir(Rails.root.join("spec/models"))
         end
 
-        path = "spec/models/#{descendant.name.downcase}_spec.rb"
+        path = "spec/models/#{descendant.name.underscore}_spec.rb"
         puts "Creating spec file for #{path}"
         f = File.open("#{Rails.root.join(path)}", 'wb+')
         f.write(final_text)
