@@ -74,12 +74,12 @@ module SpecProducer
         final_text << "\n  # Associations\n"
       end
 
-      descendant.reflections.keys.each do |key|
-        final_text << case descendant.reflections[key].macro
-          when :belongs_to then "  it { should belong_to :#{key} }\n"
-          when :has_one then "  it { should have_one :#{key} }\n"
-          when :has_many then "  it { should have_many :#{key} }\n"
-          when :has_and_belongs_to_many then "  it { should have_and_belong_to_many :#{key} }\n"
+      descendant.reflections.each_pair do |key, reflection|
+        final_text << case reflection.macro
+          when :belongs_to then "  it { should belong_to(:#{key})#{produce_association_options(reflection)} }\n"
+          when :has_one then "  it { should have_one(:#{key})#{produce_association_options(reflection)} }\n"
+          when :has_many then "  it { should have_many(:#{key})#{produce_association_options(reflection)} }\n"
+          when :has_and_belongs_to_many then "  it { should have_and_belong_to_many(:#{key})#{produce_association_options(reflection)} }\n"
         end
       end
 
@@ -331,5 +331,27 @@ module SpecProducer
     end
 
     nil
+  end
+
+  private 
+
+  def self.produce_association_options(reflection)
+    return if reflection.options.empty?
+
+    final_text = []
+
+    reflection.options.each_pair do |key, value|
+      final_text << case key
+        when :inverse_of then "inverse_of(:#{value})"
+        when :autosave then "autosave(#{value})"
+        when :through then "through(:#{value})"
+        when :class_name then "class_name('#{value}')"
+        when :foreign_key then "with_foreign_key('#{value}')"
+        when :primary_key then "with_primary_key('#{value}')"
+        when :source then "source(:#{value})"
+        when :dependent then "dependent(:#{value})"
+      end
+    end
+    final_text.reject(&:nil?).join('.').prepend('.')
   end
 end
