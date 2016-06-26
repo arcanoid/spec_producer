@@ -74,20 +74,20 @@ module SpecProducer
         final_text << "\n  # Associations\n"
       end
 
-      descendant.reflections.keys.each do |key|
-        final_text << case descendant.reflections[key].macro
-          when :belongs_to then "  it { should belong_to :#{key} }\n"
-          when :has_one then "  it { should have_one :#{key} }\n"
-          when :has_many then "  it { should have_many :#{key} }\n"
-          when :has_and_belongs_to_many then "  it { should have_and_belong_to_many :#{key} }\n"
+      descendant.reflections.each_pair do |key, reflection|
+        final_text << case reflection.macro
+          when :belongs_to then "  it { should belong_to(:#{key})#{produce_association_options(reflection)} }\n"
+          when :has_one then "  it { should have_one(:#{key})#{produce_association_options(reflection)} }\n"
+          when :has_many then "  it { should have_many(:#{key})#{produce_association_options(reflection)} }\n"
+          when :has_and_belongs_to_many then "  it { should have_and_belong_to_many(:#{key})#{produce_association_options(reflection)} }\n"
         end
       end
 
       final_text << "end"
 
-      if File.exists?(Rails.root.join("spec/models/#{descendant.name.downcase}_spec.rb"))
+      if File.exists?(Rails.root.join("spec/models/#{descendant.name.underscore}_spec.rb"))
         puts '#'*100
-        puts "Please, check whether the following lines are included in: " + descendant.name.downcase + "_spec.rb\n"
+        puts "Please, check whether the following lines are included in: " + descendant.name.underscore + "_spec.rb\n"
         puts '#'*100
         puts "\n"
         puts final_text
@@ -97,7 +97,7 @@ module SpecProducer
           Dir.mkdir(Rails.root.join("spec/models"))
         end
 
-        path = "spec/models/#{descendant.name.downcase}_spec.rb"
+        path = "spec/models/#{descendant.name.underscore}_spec.rb"
         puts "Creating spec file for #{path}"
         f = File.open("#{Rails.root.join(path)}", 'wb+')
         f.write(final_text)
@@ -331,5 +331,27 @@ module SpecProducer
     end
 
     nil
+  end
+
+  private 
+
+  def self.produce_association_options(reflection)
+    return if reflection.options.empty?
+
+    final_text = []
+
+    reflection.options.each_pair do |key, value|
+      final_text << case key
+        when :inverse_of then "inverse_of(:#{value})"
+        when :autosave then "autosave(#{value})"
+        when :through then "through(:#{value})"
+        when :class_name then "class_name('#{value}')"
+        when :foreign_key then "with_foreign_key('#{value}')"
+        when :primary_key then "with_primary_key('#{value}')"
+        when :source then "source(:#{value})"
+        when :dependent then "dependent(:#{value})"
+      end
+    end
+    final_text.reject(&:nil?).join('.').prepend('.')
   end
 end
