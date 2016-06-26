@@ -98,7 +98,7 @@ module SpecProducer
         end
 
         path = "spec/models/#{descendant.name.underscore}_spec.rb"
-        puts "Creating spec file for #{path}"
+        puts "Producing model spec file for: #{path}"
         f = File.open("#{Rails.root.join(path)}", 'wb+')
         f.write(final_text)
         f.close
@@ -153,7 +153,7 @@ module SpecProducer
         end
 
         path = "spec/routing/#{route_group[0]}_routing_spec.rb"
-        puts "Creating spec file for #{route_group[0]}"
+        puts "Producing routing spec file for: #{route_group[0]}"
         f = File.open("#{Rails.root.join(path)}", 'wb+')
         f.write(final_text)
         f.close
@@ -188,6 +188,7 @@ module SpecProducer
       final_text << "end\n"
 
       unless FileTest.exists?(file_name)
+        puts "Producing view spec file for: #{file_name}"
         f = File.open(file_name, 'wb+')
         f.write(final_text)
         f.close
@@ -219,6 +220,7 @@ module SpecProducer
       final_text << "end"
 
       unless FileTest.exists?(file_name)
+        puts "Producing helper spec file for: #{file_name}"
         f = File.open(file_name, 'wb+')
         f.write(final_text)
         f.close
@@ -265,6 +267,7 @@ module SpecProducer
       final_text << "end\n"
 
       unless FileTest.exists?(file_name)
+        puts "Producing controller spec file for: #{file_name}"
         f = File.open(file_name, 'wb+')
         f.write(final_text)
         f.close
