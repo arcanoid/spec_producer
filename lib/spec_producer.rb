@@ -92,6 +92,11 @@ module SpecProducer
         puts "\n"
         puts final_text
       else
+        unless Dir.exists? Rails.root.join("spec")
+          puts "Generating spec directory"
+          Dir.mkdir(Rails.root.join("spec"))
+        end
+
         unless Dir.exists? Rails.root.join("spec/models")
           puts "Generating spec/models directory"
           Dir.mkdir(Rails.root.join("spec/models"))
@@ -147,6 +152,11 @@ module SpecProducer
         puts "\n"
         puts final_text
       else
+        unless Dir.exists? Rails.root.join("spec")
+          puts "Generating spec directory"
+          Dir.mkdir(Rails.root.join("spec"))
+        end
+
         unless Dir.exists? Rails.root.join("spec/routing")
           puts "Generating spec/routing directory"
           Dir.mkdir(Rails.root.join("spec/routing"))
@@ -187,6 +197,11 @@ module SpecProducer
       final_text << "  pending 'view content test'\n"
       final_text << "end\n"
 
+      unless Dir.exists? Rails.root.join("spec")
+        puts "Generating spec directory"
+        Dir.mkdir(Rails.root.join("spec"))
+      end
+
       unless FileTest.exists?(file_name)
         puts "Producing view spec file for: #{file_name}"
         f = File.open(file_name, 'wb+')
@@ -218,6 +233,11 @@ module SpecProducer
       final_text << "describe #{File.basename(file, ".rb").camelcase} do\n"
       final_text << "  pending 'view helper tests'\n"
       final_text << "end"
+
+      unless Dir.exists? Rails.root.join("spec")
+        puts "Generating spec directory"
+        Dir.mkdir(Rails.root.join("spec"))
+      end
 
       unless FileTest.exists?(file_name)
         puts "Producing helper spec file for: #{file_name}"
@@ -265,6 +285,11 @@ module SpecProducer
       end
 
       final_text << "end\n"
+
+      unless Dir.exists? Rails.root.join("spec")
+        puts "Generating spec directory"
+        Dir.mkdir(Rails.root.join("spec"))
+      end
 
       unless FileTest.exists?(file_name)
         puts "Producing controller spec file for: #{file_name}"
