@@ -162,6 +162,23 @@ module SpecProducer
           Dir.mkdir(Rails.root.join("spec/routing"))
         end
 
+        # Check whether the route is not in top level namespace but deeper
+        full_path = 'spec/routing'
+        paths = route_group[0].split('/')
+
+        # And if it is deeper in the tree make sure to check if the related namespaces exist or create them
+        if paths.size > 1
+          paths.each do |path|
+            unless path == paths.last
+              full_path << "/#{path}"
+
+              unless Dir.exists? full_path
+                Dir.mkdir(Rails.root.join(full_path))
+              end
+            end
+          end
+        end
+
         path = "spec/routing/#{route_group[0]}_routing_spec.rb"
         puts "Producing routing spec file for: #{route_group[0]}"
         f = File.open("#{Rails.root.join(path)}", 'wb+')
