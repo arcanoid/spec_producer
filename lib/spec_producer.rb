@@ -251,7 +251,7 @@ module SpecProducer
   end
 
   def self.produce_specs_for_controllers
-    Dir.glob(Rails.root.join('app/controllers/*.rb')).each do |x|
+    Dir.glob(Rails.root.join('app/controllers/**/*.rb')).each do |x|
       require x
     end
 
