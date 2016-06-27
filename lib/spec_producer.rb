@@ -361,7 +361,9 @@ module SpecProducer
     nil
   end
 
-  private 
+  #######
+  private
+  #######
 
   def self.produce_association_options(reflection)
     return if reflection.options.empty?
