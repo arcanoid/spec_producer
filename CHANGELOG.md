@@ -1,3 +1,16 @@
+## 0.4.0 (2016-07-09)
+
+Features:
+* Added tests for readonly attributes
+* Added more validation tests
+* Added tests for db associations
+
+Bug fixes:
+* Fixes bug with naming
+* Fixes bug when spec directory doesn't exist
+* Fixes bug that skipped models in deeper namespace
+* Code reformats and clearer output
+
 ## 0.3.0 (2016-06-12)
 
 Features:
