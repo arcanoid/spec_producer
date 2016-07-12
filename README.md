@@ -1,6 +1,7 @@
 # SpecProducer
 
 [![Build Status](https://travis-ci.org/arcanoid/spec_producer.svg?branch=master)](https://travis-ci.org/arcanoid/spec_producer)
+[![Gem Version](https://badge.fury.io/rb/spec_producer.svg)](https://badge.fury.io/rb/spec_producer)
 
 SpecProducer is a gem that is meant to assist users in skipping the tedious work of creating spec tests for basic 
 functionality. It reads through the files of the project and prepares some of the basic spec tests for you. 
