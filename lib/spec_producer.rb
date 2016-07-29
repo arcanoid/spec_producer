@@ -111,6 +111,8 @@ module SpecProducer
     end
 
     nil
+  rescue NameError
+    puts "ActiveRecord is not set for this project. Skipping model specs production."
   end
 
   def self.produce_specs_for_routes
