@@ -1,3 +1,9 @@
+## 0.5.0 (2016-08-02)
+
+Features:
+* Updated routing specs producer to use expect rather than should
+* Mini fix for projects that may not have ActiveRecord set
+
 ## 0.4.0 (2016-07-09)
 
 Features:
