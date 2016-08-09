@@ -1,3 +1,8 @@
+## 0.6.0 (2016-08-09)
+
+Features:
+* Update all produced specs to specify the proper type of it to comply with rspec 3.5 and onwards
+
 ## 0.5.0 (2016-08-02)
 
 Features:
