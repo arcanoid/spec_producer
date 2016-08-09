@@ -16,7 +16,7 @@ module SpecProducer
 
     ActiveRecord::Base.descendants.each do |descendant|
       final_text = "require 'rails_helper'\n\n"
-      final_text << "describe #{descendant.name} do\n"
+      final_text << "describe #{descendant.name}, :type => :model do\n"
 
       descendant.attribute_names.each do |attribute|
         final_text << "  it { should respond_to :#{attribute}, :#{attribute}= }\n"
@@ -129,7 +129,7 @@ module SpecProducer
 
     routes.group_by { |route| route[:controller] }.each do |route_group|
       final_text = "require 'rails_helper'\n\n"
-      final_text << "describe '#{route_group[0]} routes' do\n"
+      final_text << "describe '#{route_group[0]} routes', :type => :routing do\n"
 
       route_group[1].each do |route|
         final_text << "  it \"#{route[:verb].upcase} #{route[:path]} should route to '#{route[:controller]}##{route[:action]}'\" do\n"
@@ -209,7 +209,7 @@ module SpecProducer
 
       file_name = "#{file.gsub('app/', 'spec/')}_spec.rb"
       final_text = "require 'rails_helper'\n\n"
-      final_text << "describe '#{file.gsub('app/views/', '')}' do\n"
+      final_text << "describe '#{file.gsub('app/views/', '')}', :type => :view do\n"
       final_text << "  before do\n"
       final_text << "    render\n"
       final_text << "  end\n\n"
@@ -249,7 +249,7 @@ module SpecProducer
 
       file_name = "#{file.gsub('app/', 'spec/').gsub('.rb', '')}_spec.rb"
       final_text = "require 'rails_helper'\n\n"
-      final_text << "describe #{File.basename(file, ".rb").camelcase} do\n"
+      final_text << "describe #{File.basename(file, ".rb").camelcase}, :type => :helper do\n"
       final_text << "  pending 'view helper tests'\n"
       final_text << "end"
 
@@ -293,7 +293,7 @@ module SpecProducer
 
       file_name = "#{path_name.gsub('app/', 'spec/')}_spec.rb"
       final_text = "require 'rails_helper'\n\n"
-      final_text << "describe #{descendant.name} do\n"
+      final_text << "describe #{descendant.name}, :type => :controller do\n"
 
       descendant.action_methods.each do |method|
         final_text << "  pending '##{method}'\n"
