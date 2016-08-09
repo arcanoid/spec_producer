@@ -1,3 +1,8 @@
+## 0.7.0 (2016-08-10)
+
+Features:
+* Producer now tries to produce all factories for the project that uses it
+
 ## 0.6.0 (2016-08-09)
 
 Features:
