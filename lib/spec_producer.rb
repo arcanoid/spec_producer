@@ -9,6 +9,65 @@ module SpecProducer
     produce_specs_for_helpers
   end
 
+  def self.produce_factories
+    Dir.glob(Rails.root.join('app/models/*.rb')).each do |x|
+      require x
+    end
+
+    ActiveRecord::Base.descendants.each do |descendant|
+      final_text = "FactoryGirl.define do\n"
+      final_text << "  factory :#{descendant.name.underscore}, :class => #{descendant.name} do\n"
+
+      descendant.columns.each do |column|
+        value = case column.type
+                  when :string then "'#{descendant.name.underscore.upcase}_#{column.name.underscore.upcase}'"
+                  when :text then "'#{descendant.name.underscore.upcase}_#{column.name.underscore.upcase}'"
+                  when :integer then "#{rand(1...10)}"
+                  when :decimal then "#{rand(1.0...100.0)}"
+                  when :float then "#{rand(1.0...100.0)}"
+                  when :datetime then "'#{DateTime.now + 365}'"
+                  when :time then "'#{Time.now + 365*24*60*60}'"
+                  when :date then "'#{Date.today + 365}'"
+                  when :boolean then "#{rand(2) == 1 ? true : false}"
+                  when :binary then "#{5.times.collect { rand(0..1).to_s }.join('')}"
+                end
+
+        final_text << "    #{column.name} #{value}\n"
+      end
+
+      final_text << "  end\n"
+      final_text << "end"
+
+      if File.exists?(Rails.root.join("spec/factories/#{descendant.name.underscore}.rb"))
+        puts '#'*100
+        puts "Please, check whether the following lines are included in: spec/factories/" + descendant.name.underscore + ".rb\n"
+        puts '#'*100
+        puts "\n"
+        puts final_text
+      else
+        unless Dir.exists? Rails.root.join("spec")
+          puts "Generating spec directory"
+          Dir.mkdir(Rails.root.join("spec"))
+        end
+
+        unless Dir.exists? Rails.root.join("spec/factories")
+          puts "Generating spec/factories directory"
+          Dir.mkdir(Rails.root.join("spec/factories"))
+        end
+
+        path = "spec/factories/#{descendant.name.underscore}.rb"
+        puts "Producing factory file for: #{path}"
+        f = File.open("#{Rails.root.join(path)}", 'wb+')
+        f.write(final_text)
+        f.close
+      end
+    end
+
+    nil
+  rescue NameError
+    puts "ActiveRecord is not set for this project. Can't produce factories for this project."
+  end
+
   def self.produce_specs_for_models
     Dir.glob(Rails.root.join('app/models/*.rb')).each do |x|
       require x
@@ -76,11 +135,11 @@ module SpecProducer
 
       descendant.reflections.each_pair do |key, reflection|
         final_text << case reflection.macro
-          when :belongs_to then "  it { should belong_to(:#{key})#{produce_association_options(reflection)} }\n"
-          when :has_one then "  it { should have_one(:#{key})#{produce_association_options(reflection)} }\n"
-          when :has_many then "  it { should have_many(:#{key})#{produce_association_options(reflection)} }\n"
-          when :has_and_belongs_to_many then "  it { should have_and_belong_to_many(:#{key})#{produce_association_options(reflection)} }\n"
-        end
+                        when :belongs_to then "  it { should belong_to(:#{key})#{produce_association_options(reflection)} }\n"
+                        when :has_one then "  it { should have_one(:#{key})#{produce_association_options(reflection)} }\n"
+                        when :has_many then "  it { should have_many(:#{key})#{produce_association_options(reflection)} }\n"
+                        when :has_and_belongs_to_many then "  it { should have_and_belong_to_many(:#{key})#{produce_association_options(reflection)} }\n"
+                      end
       end
 
       final_text << "end"
@@ -391,15 +450,15 @@ module SpecProducer
 
     reflection.options.each_pair do |key, value|
       final_text << case key
-        when :inverse_of then "inverse_of(:#{value})"
-        when :autosave then "autosave(#{value})"
-        when :through then "through(:#{value})"
-        when :class_name then "class_name('#{value}')"
-        when :foreign_key then "with_foreign_key('#{value}')"
-        when :primary_key then "with_primary_key('#{value}')"
-        when :source then "source(:#{value})"
-        when :dependent then "dependent(:#{value})"
-      end
+                      when :inverse_of then "inverse_of(:#{value})"
+                      when :autosave then "autosave(#{value})"
+                      when :through then "through(:#{value})"
+                      when :class_name then "class_name('#{value}')"
+                      when :foreign_key then "with_foreign_key('#{value}')"
+                      when :primary_key then "with_primary_key('#{value}')"
+                      when :source then "source(:#{value})"
+                      when :dependent then "dependent(:#{value})"
+                    end
     end
     final_text.reject(&:nil?).join('.').prepend('.')
   end
