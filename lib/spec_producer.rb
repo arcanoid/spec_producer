@@ -194,13 +194,13 @@ module SpecProducer
         final_text << "  it \"#{route[:verb].upcase} #{route[:path]} should route to '#{route[:controller]}##{route[:action]}'\" do\n"
 
         final_text << "    expect(:#{route[:verb]} => '#{route[:path].gsub(/:[a-zA-Z_]+/){ |param| param.gsub(':','').upcase }}').\n"
-        final_text << "      to route_to(:controller => '#{route[:controller]}',\n"
+        final_text << "        to route_to(:controller => '#{route[:controller]}',\n"
 
         /:[a-zA-Z_]+/.match(route[:path]).to_a.each do |parameter|
-          final_text << "              #{parameter} => '#{parameter.gsub(':','').upcase}',\n"
+          final_text << "                    #{parameter} => '#{parameter.gsub(':','').upcase}',\n"
         end
 
-        final_text << "          :action => '#{route[:action]}')\n"
+        final_text << "                    :action => '#{route[:action]}')\n"
         final_text << "  end\n\n"
       end
 
