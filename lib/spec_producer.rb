@@ -195,13 +195,13 @@ module SpecProducer
 
         final_text << "    expect(:#{route[:verb]} => '#{route[:path].gsub(/:[a-zA-Z_]+/){ |param| param.gsub(':','').upcase }}').\n"
         final_text << "        to route_to(:controller => '#{route[:controller]}',\n"
+        final_text << "                    :action => '#{route[:action]}'"
 
-        /:[a-zA-Z_]+/.match(route[:path]).to_a.each do |parameter|
-          final_text << "                    #{parameter} => '#{parameter.gsub(':','').upcase}',\n"
+        route[:path].scan(/:[a-zA-Z_]+/).flatten.each do |parameter|
+          final_text << ",\n                    #{parameter} => '#{parameter.gsub(':','').upcase}'"
         end
 
-        final_text << "                    :action => '#{route[:action]}')\n"
-        final_text << "  end\n\n"
+        final_text << ")\n  end\n\n"
       end
 
       final_text << 'end'
