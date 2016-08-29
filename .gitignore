@@ -8,5 +8,6 @@
 /spec/reports/
 /tmp/
 
-# Ignore idea configuration.
-/.idea
+# IntelliJ / Rubymine files
+.idea/
+*.iml
