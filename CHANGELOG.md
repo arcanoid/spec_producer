@@ -1,3 +1,8 @@
+## 0.8.0 (2016-08-30)
+
+Fixes:
+* Updated production of routing specs
+
 ## 0.7.0 (2016-08-10)
 
 Features:
