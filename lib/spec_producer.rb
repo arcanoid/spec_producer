@@ -216,11 +216,17 @@ module SpecProducer
       final_text << "end\n"
 
       if File.exists?(Rails.root.join("spec/routing/#{route_group[0]}_routing_spec.rb"))
-        puts '#'*100
-        puts "Please, check whether the following lines are included in: spec/routing/#{route_group[0]}_routing_spec.rb\n"
-        puts '#'*100
-        puts "\n"
-        puts final_text
+        if File.open(Rails.root.join("spec/routing/#{route_group[0]}_routing_spec.rb")).read == final_text
+          # nothing to do here, pre-existing content is the same :)
+        else
+          puts '#'*100
+          puts "Please, check whether the following lines are included in: spec/routing/#{route_group[0]}_routing_spec.rb\n"
+          puts '#'*100
+          puts "\n"
+          puts final_text
+        end
+
+
       else
         unless Dir.exists? Rails.root.join("spec")
           puts "Generating spec directory"
