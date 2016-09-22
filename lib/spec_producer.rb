@@ -186,11 +186,28 @@ module SpecProducer
       end
     end.compact
 
+    routing_spec_files = Dir.glob(Rails.root.join('spec/routing/**/*_routing_spec.rb'))
+
+    helper_strings_used = if routing_spec_files.blank?
+                            []
+                          else
+                            %x{ grep require #{routing_spec_files} }.split("\n").map { |string| string[/\w+_helper/]}
+                          end
+
+
+
+    if helper_strings_used.uniq.length == 1
+      require_helper_string = helper_strings_used.first
+    else
+      require_helper_string = 'rails_helper'
+    end
+
     routes.group_by { |route| route[:controller] }.each do |route_group|
-      final_text = "require 'rails_helper'\n\n"
+      final_text = "require '#{require_helper_string}'\n\n"
       final_text << "describe '#{route_group[0]} routes', :type => :routing do\n"
 
-      route_group[1].each do |route|
+      route_group[1].each_with_index do |route, index|
+        final_text << "\n" unless index == 0
         final_text << "  it \"#{route[:verb].upcase} #{route[:path].gsub(/\(.*?\)/, '')} should route to '#{route[:controller]}##{route[:action]}'\" do\n"
 
         final_text << "    expect(:#{route[:verb]} => '#{route[:path].gsub(/\(.*?\)/, '').gsub(/:[a-zA-Z_]+/){ |param| param.gsub(':','').upcase }}').\n"
@@ -201,17 +218,21 @@ module SpecProducer
           final_text << ",\n                    #{parameter} => '#{parameter.gsub(':','').upcase}'"
         end
 
-        final_text << ")\n  end\n\n"
+        final_text << ")\n  end\n"
       end
 
-      final_text << 'end'
+      final_text << "end\n"
 
       if File.exists?(Rails.root.join("spec/routing/#{route_group[0]}_routing_spec.rb"))
-        puts '#'*100
-        puts "Please, check whether the following lines are included in: spec/routing/#{route_group[0]}_routing_spec.rb\n"
-        puts '#'*100
-        puts "\n"
-        puts final_text
+        if File.open(Rails.root.join("spec/routing/#{route_group[0]}_routing_spec.rb")).read == final_text
+          # nothing to do here, pre-existing content is the same :)
+        else
+          puts '#'*100
+          puts "Please, check whether the following lines are included in: spec/routing/#{route_group[0]}_routing_spec.rb\n"
+          puts '#'*100
+          puts "\n"
+          puts final_text
+        end
       else
         unless Dir.exists? Rails.root.join("spec")
           puts "Generating spec directory"
