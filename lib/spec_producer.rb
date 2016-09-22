@@ -186,8 +186,16 @@ module SpecProducer
       end
     end.compact
 
+    helper_strings_used = %x{ grep require #{Dir.glob(Rails.root.join('spec/routing/**/*_routing_spec.rb')).join(' ')} }.split("\n").map { |string| string[/\w+_helper/]}
+
+    if helper_strings_used.uniq.length == 1
+      require_helper_string = helper_strings_used.first
+    else
+      require_helper_string = 'rails_helper'
+    end
+
     routes.group_by { |route| route[:controller] }.each do |route_group|
-      final_text = "require 'rails_helper'\n\n"
+      final_text = "require '#{require_helper_string}'\n\n"
       final_text << "describe '#{route_group[0]} routes', :type => :routing do\n"
 
       route_group[1].each do |route|
