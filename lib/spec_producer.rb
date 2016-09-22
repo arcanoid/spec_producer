@@ -186,7 +186,15 @@ module SpecProducer
       end
     end.compact
 
-    helper_strings_used = %x{ grep require #{Dir.glob(Rails.root.join('spec/routing/**/*_routing_spec.rb')).join(' ')} }.split("\n").map { |string| string[/\w+_helper/]}
+    routing_spec_files = Dir.glob(Rails.root.join('spec/routing/**/*_routing_spec.rb'))
+
+    helper_strings_used = if routing_spec_files.blank?
+                            []
+                          else
+                            %x{ grep require #{routing_spec_files} }.split("\n").map { |string| string[/\w+_helper/]}
+                          end
+
+
 
     if helper_strings_used.uniq.length == 1
       require_helper_string = helper_strings_used.first
@@ -225,8 +233,6 @@ module SpecProducer
           puts "\n"
           puts final_text
         end
-
-
       else
         unless Dir.exists? Rails.root.join("spec")
           puts "Generating spec directory"
