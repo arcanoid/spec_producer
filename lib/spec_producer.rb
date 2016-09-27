@@ -487,4 +487,7 @@ module SpecProducer
       'rails_helper'
     end
   end
+
+  private_class_method :produce_association_options
+  private_class_method :require_helper_string
 end
