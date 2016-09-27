@@ -473,7 +473,7 @@ module SpecProducer
     helper_strings_used = []
 
     spec_files.each do |file|
-      helper = /require \'(?<helpers>\S*)\'/.match File.open(file).read
+      helper = /require \'(?<helpers>\S*)\'/.match File.read(file)
 
       helper_strings_used << helper[1] if helper.present?
     end
@@ -481,9 +481,9 @@ module SpecProducer
     helper_strings_used.compact!
 
     if helper_strings_used.uniq.length == 1
-      puts "More than one helpers are in place in your specs! Proceeding with the first one we could find." 
       helper_strings_used.first
     else
+      puts "More than one helpers are in place in your specs! Proceeding with 'rails_helpers'." 
       'rails_helper'
     end
   end
