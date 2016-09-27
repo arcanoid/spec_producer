@@ -2,11 +2,36 @@ require "spec_producer/version"
 
 module SpecProducer
   def self.produce_specs_for_all_types
+    set_up_necessities
     produce_specs_for_models
     produce_specs_for_routes
     produce_specs_for_views
     produce_specs_for_controllers
     produce_specs_for_helpers
+  end
+
+  def self.set_up_necessities
+    gemfiles = Dir.glob(Rails.root.join('Gemfile'))
+    if gemfiles.size > 0
+      contents = File.read(gemfiles.first)
+      gems = contents.scan(/gem \'(?<gem>\S*)\'/).flatten.uniq
+      
+      if !(gems.include? 'rspec-rails')
+	if !(gems.include? 'factory_girl_rails')
+	   contents << "\ngroup :test do\n  gem 'rspec-rails'\n  gem 'factory_girl_rails'\nend"
+	else
+	   contents << "\ngroup :test do\n  gem 'rspec-rails'\nend"
+	end
+      elsif !(gems.include? 'factory_girl_rails')
+	contents << "\ngroup :test do\n  gem 'factory_girl_rails'\nend"
+      end
+
+      f = File.open(gemfiles.first, 'wb+')
+      f.write(contents)
+      f.close
+    else
+       puts "We couldn't find a Gemfile and setting up halted!"
+    end
   end
 
   def self.produce_factories
