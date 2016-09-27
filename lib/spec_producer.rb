@@ -74,7 +74,7 @@ module SpecProducer
     end
 
     ActiveRecord::Base.descendants.each do |descendant|
-      final_text = "require 'rails_helper'\n\n"
+      final_text = "require '#{require_helper_string}'\n\n"
       final_text << "describe #{descendant.name}, :type => :model do\n"
 
       descendant.attribute_names.each do |attribute|
@@ -186,22 +186,6 @@ module SpecProducer
       end
     end.compact
 
-    routing_spec_files = Dir.glob(Rails.root.join('spec/routing/**/*_routing_spec.rb'))
-
-    helper_strings_used = if routing_spec_files.blank?
-                            []
-                          else
-                            %x{ grep require #{routing_spec_files} }.split("\n").map { |string| string[/\w+_helper/]}
-                          end
-
-
-
-    if helper_strings_used.uniq.length == 1
-      require_helper_string = helper_strings_used.first
-    else
-      require_helper_string = 'rails_helper'
-    end
-
     routes.group_by { |route| route[:controller] }.each do |route_group|
       final_text = "require '#{require_helper_string}'\n\n"
       final_text << "describe '#{route_group[0]} routes', :type => :routing do\n"
@@ -288,7 +272,7 @@ module SpecProducer
       end
 
       file_name = "#{file.gsub('app/', 'spec/')}_spec.rb"
-      final_text = "require 'rails_helper'\n\n"
+      final_text = "require '#{require_helper_string}'\n\n"
       final_text << "describe '#{file.gsub('app/views/', '')}', :type => :view do\n"
       final_text << "  before do\n"
       final_text << "    render\n"
@@ -328,7 +312,7 @@ module SpecProducer
       end
 
       file_name = "#{file.gsub('app/', 'spec/').gsub('.rb', '')}_spec.rb"
-      final_text = "require 'rails_helper'\n\n"
+      final_text = "require '#{require_helper_string}'\n\n"
       final_text << "describe #{File.basename(file, ".rb").camelcase}, :type => :helper do\n"
       final_text << "  pending 'view helper tests'\n"
       final_text << "end"
@@ -372,7 +356,7 @@ module SpecProducer
       end
 
       file_name = "#{path_name.gsub('app/', 'spec/')}_spec.rb"
-      final_text = "require 'rails_helper'\n\n"
+      final_text = "require '#{require_helper_string}'\n\n"
       final_text << "describe #{descendant.name}, :type => :controller do\n"
 
       descendant.action_methods.each do |method|
@@ -482,5 +466,25 @@ module SpecProducer
                     end
     end
     final_text.reject(&:nil?).join('.').prepend('.')
+  end
+
+  def self.require_helper_string
+    spec_files = Dir.glob(Rails.root.join('spec/**/*_spec.rb'))
+    helper_strings_used = []
+
+    spec_files.each do |file|
+      helper = /require \'(?<helpers>\S*)\'/.match File.open(file).read
+
+      helper_strings_used << helper[1] if helper.present?
+    end
+
+    helper_strings_used.compact!
+
+    if helper_strings_used.uniq.length == 1
+      puts "More than one helpers are in place in your specs! Proceeding with the first one we could find." 
+      helper_strings_used.first
+    else
+      'rails_helper'
+    end
   end
 end
