@@ -12,18 +12,25 @@ module SpecProducer
 
   def self.set_up_necessities
     gemfiles = Dir.glob(Rails.root.join('Gemfile'))
+
     if gemfiles.size > 0
       contents = File.read(gemfiles.first)
       gems = contents.scan(/gem \'(?<gem>\S*)\'/).flatten.uniq
+      missing_gems = []
       
-      if !(gems.include? 'rspec-rails')
-	if !(gems.include? 'factory_girl_rails')
-	   contents << "\ngroup :test do\n  gem 'rspec-rails'\n  gem 'factory_girl_rails'\nend"
-	else
-	   contents << "\ngroup :test do\n  gem 'rspec-rails'\nend"
-	end
-      elsif !(gems.include? 'factory_girl_rails')
-	contents << "\ngroup :test do\n  gem 'factory_girl_rails'\nend"
+      missing_gems << 'rspec-rails' unless (gems.include? 'rspec-rails')
+      missing_gems << 'factory_girl_rails' unless (gems.include? 'factory_girl_rails')
+      missing_gems << 'shoulda-matchers' unless (gems.include? 'shoulda-matchers')
+      missing_gems << 'capybara' unless (gems.include? 'capybara')
+      
+      if missing_gems.size > 0
+          contents << "\ngroup :test do\n"
+
+	  missing_gems.each do |gem|
+	     contents << "gem '#{gem}'\n"
+	  end
+
+	  contents << "end"
       end
 
       f = File.open(gemfiles.first, 'wb+')
