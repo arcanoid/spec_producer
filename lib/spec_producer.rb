@@ -307,7 +307,7 @@ module SpecProducer
       final_text = "require '#{require_helper_string}'\n\n"
       final_text << "describe '#{file.gsub('app/views/', '')}', :type => :view do\n"
       final_text << "  let(:page) { Capybara::Node::Simple.new(rendered) }\n"
-      final_text << "  subject { page }\n"
+      final_text << "  subject { page }\n\n"
       final_text << "  before do\n"
       final_text << "    render\n"
       final_text << "  end\n\n"
@@ -503,6 +503,10 @@ module SpecProducer
   end
 
   def self.require_helper_string
+    @require_helper_string ||= collect_helper_strings
+  end
+
+  def self.collect_helper_strings
     spec_files = Dir.glob(Rails.root.join('spec/**/*_spec.rb'))
     helper_strings_used = []
 
@@ -524,4 +528,5 @@ module SpecProducer
 
   private_class_method :produce_association_options
   private_class_method :require_helper_string
+  private_class_method :collect_helper_strings
 end
