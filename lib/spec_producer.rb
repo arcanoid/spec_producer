@@ -27,7 +27,7 @@ module SpecProducer
           contents << "\ngroup :test do\n"
 
 	  missing_gems.each do |gem|
-	     contents << "gem '#{gem}'\n"
+	     contents << "  gem '#{gem}'\n"
 	  end
 
 	  contents << "end"
