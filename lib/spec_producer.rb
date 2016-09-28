@@ -1,4 +1,5 @@
 require "spec_producer/version"
+require "spec_producer/missing_files"
 
 module SpecProducer
   def self.produce_specs_for_all_types
@@ -420,62 +421,26 @@ module SpecProducer
   end
 
   def self.print_all_missing_spec_files
-    print_missing_model_specs
-    print_missing_controller_specs
-    print_missing_helper_specs
-    print_missing_view_specs
+    MissingFiles.print_missing_model_specs
+    MissingFiles.print_missing_controller_specs
+    MissingFiles.print_missing_helper_specs
+    MissingFiles.print_missing_view_specs
   end
 
   def self.print_missing_model_specs
-    files_list = Dir["app/models/**/*.rb"]
-
-    puts "\n" << "## Searching for missing model specs..."
-    files_list.each do |file|
-      unless FileTest.exists?(file.gsub('app/', 'spec/').gsub('.rb', '_spec.rb'))
-        puts "Missing model spec file for: #{file}"
-      end
-    end
-
-    nil
+    MissingFiles.print_missing_model_specs
   end
 
   def self.print_missing_controller_specs
-    files_list = Dir["app/controllers/**/*.rb"]
-
-    puts "\n" << "## Searching for missing controller specs..."
-    files_list.each do |file|
-      unless FileTest.exists?(file.gsub('app/', 'spec/').gsub('.rb', '_spec.rb'))
-        puts "Missing controller spec file for: #{file}"
-      end
-    end
-
-    nil
+    MissingFiles.print_missing_controller_specs
   end
 
   def self.print_missing_helper_specs
-    files_list = Dir["app/helpers/**/*.rb"]
-
-    puts "\n" << "## Searching for missing helper specs..."
-    files_list.each do |file|
-      unless FileTest.exists?(file.gsub('app/', 'spec/').gsub('.rb', '_spec.rb'))
-        puts "Missing helper spec file for: #{file}"
-      end
-    end
-
-    nil
+    MissingFiles.print_missing_helper_specs
   end
 
   def self.print_missing_view_specs
-    files_list = Dir["app/views/**/*.erb"]
-
-    puts "\n" << "## Searching for missing view specs..."
-    files_list.each do |file|
-      unless FileTest.exists?("#{file.gsub('app/', 'spec/')}_spec.rb")
-        puts "Missing spec file for: #{file}"
-      end
-    end
-
-    nil
+    MissingFiles.print_missing_view_specs
   end
 
   #######
