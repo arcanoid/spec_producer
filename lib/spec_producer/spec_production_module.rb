@@ -202,15 +202,38 @@ module SpecProductionModule
         end
       end
 
+      file_content = File.read(file)
+      fields_in_file = file_content.scan(/(check_box_tag|text_field_tag|text_area_tag|select_tag|email_field_tag|color_field_tag|date_field_tag|datetime_field_tag|datetime_local_field_tag|hidden_field_tag|password_field_tag|phone_field_tag|radio_button_tag) \:(?<field>[a-zA-Z_]*)/).flatten.uniq
+      objects_in_file = file_content.scan(/@(?<field>[a-zA-Z_]*)/).flatten.uniq
+
       file_name = "#{file.gsub('app/', 'spec/')}_spec.rb"
       final_text = "require '#{require_helper_string}'\n\n"
       final_text << "describe '#{file.gsub('app/views/', '')}', :type => :view do\n"
       final_text << "  let(:page) { Capybara::Node::Simple.new(rendered) }\n"
       final_text << "  subject { page }\n\n"
       final_text << "  before do\n"
+
+      objects_in_file.each do |object|
+        final_text << "    assign(:#{object}, '#{object}')\n"
+      end
+
       final_text << "    render\n"
       final_text << "  end\n\n"
-      final_text << "  pending 'view content test'\n"
+
+      if fields_in_file.size > 0
+        final_text << "  describe 'content' do\n"
+
+        fields_in_file.each do |field_name|
+          final_text << "    it { should have_field '#{field_name }' }\n"
+        end
+
+        final_text << "    skip 'view content test'\n"
+        final_text << "  end\n"
+      else
+        final_text << "  skip 'view content test'\n"
+      end
+
+      
       final_text << "end\n"
 
       unless Dir.exists? Rails.root.join("spec")
@@ -247,7 +270,7 @@ module SpecProductionModule
       file_name = "#{file.gsub('app/', 'spec/').gsub('.rb', '')}_spec.rb"
       final_text = "require '#{require_helper_string}'\n\n"
       final_text << "describe #{File.basename(file, ".rb").camelcase}, :type => :helper do\n"
-      final_text << "  pending 'view helper tests'\n"
+      final_text << "  skip 'view helper tests'\n"
       final_text << "end"
 
       unless Dir.exists? Rails.root.join("spec")
@@ -293,11 +316,11 @@ module SpecProductionModule
       final_text << "describe #{descendant.name}, :type => :controller do\n"
 
       descendant.action_methods.each do |method|
-        final_text << "  pending '##{method}'\n"
+        final_text << "  skip '##{method}'\n"
       end
 
       unless descendant.action_methods.size > 0
-        final_text << "  pending 'tests'\n"
+        final_text << "  skip 'tests'\n"
       end
 
       final_text << "end\n"
@@ -317,7 +340,7 @@ module SpecProductionModule
 
     nil
   end
-  
+
   #######
   private
   #######
