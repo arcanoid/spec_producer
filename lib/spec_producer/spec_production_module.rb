@@ -317,4 +317,56 @@ module SpecProductionModule
 
     nil
   end
+  
+  #######
+  private
+  #######
+
+  def self.produce_association_options(reflection)
+    return if reflection.options.empty?
+
+    final_text = []
+
+    reflection.options.each_pair do |key, value|
+      final_text << case key
+                      when :inverse_of then "inverse_of(:#{value})"
+                      when :autosave then "autosave(#{value})"
+                      when :through then "through(:#{value})"
+                      when :class_name then "class_name('#{value}')"
+                      when :foreign_key then "with_foreign_key('#{value}')"
+                      when :primary_key then "with_primary_key('#{value}')"
+                      when :source then "source(:#{value})"
+                      when :dependent then "dependent(:#{value})"
+                    end
+    end
+    final_text.reject(&:nil?).join('.').prepend('.')
+  end
+
+  def self.require_helper_string
+    @require_helper_string ||= collect_helper_strings
+  end
+
+  def self.collect_helper_strings
+    spec_files = Dir.glob(Rails.root.join('spec/**/*_spec.rb'))
+    helper_strings_used = []
+
+    spec_files.each do |file|
+      helper = /require \'(?<helpers>\S*)\'/.match File.read(file)
+
+      helper_strings_used << helper[1] if helper.present?
+    end
+
+    helper_strings_used.compact!
+
+    if helper_strings_used.uniq.length == 1
+      helper_strings_used.first
+    else
+      puts "More than one helpers are in place in your specs! Proceeding with 'rails_helpers'."
+      'rails_helper'
+    end
+  end
+
+  private_class_method :produce_association_options
+  private_class_method :require_helper_string
+  private_class_method :collect_helper_strings
 end
