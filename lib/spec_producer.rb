@@ -127,6 +127,8 @@ module SpecProducer
     MissingFiles.print_missing_controller_specs
     MissingFiles.print_missing_helper_specs
     MissingFiles.print_missing_view_specs
+    MissingFiles.print_missing_mailer_specs
+    MissingFiles.print_missing_job_specs
   end
 
   def self.print_missing_model_specs
@@ -143,5 +145,13 @@ module SpecProducer
 
   def self.print_missing_view_specs
     MissingFiles.print_missing_view_specs
+  end
+
+  def self.print_missing_mailer_specs
+    MissingFiles.print_missing_mailer_specs
+  end
+
+  def self.print_missing_job_specs
+    MissingFiles.print_missing_job_specs
   end
 end
