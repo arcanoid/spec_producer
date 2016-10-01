@@ -227,10 +227,10 @@ module SpecProductionModule
           final_text << "    it { should have_field '#{field_name }' }\n"
         end
 
-        final_text << "    skip 'view content test'\n"
+        final_text << "    pending 'view content test'\n"
         final_text << "  end\n"
       else
-        final_text << "  skip 'view content test'\n"
+        final_text << "  pending 'view content test'\n"
       end
       
       final_text << "end\n"
@@ -268,7 +268,7 @@ module SpecProductionModule
       file_name = "#{file.gsub('app/', 'spec/').gsub('.rb', '')}_spec.rb"
       final_text = "require '#{require_helper_string}'\n\n"
       final_text << "describe #{File.basename(file, ".rb").camelcase}, :type => :helper do\n"
-      final_text << "  skip 'view helper tests'\n"
+      final_text << "  pending 'view helper tests'\n"
       final_text << "end"
 
       check_if_spec_file_exists
@@ -386,11 +386,11 @@ module SpecProductionModule
       final_text << "describe #{descendant.name}, :type => :controller do\n"
 
       descendant.action_methods.each do |method|
-        final_text << "  skip '##{method}'\n"
+        final_text << "  pending '##{method}'\n"
       end
 
       unless descendant.action_methods.size > 0
-        final_text << "  skip 'tests'\n"
+        final_text << "  pending 'tests'\n"
       end
 
       final_text << "end\n"
