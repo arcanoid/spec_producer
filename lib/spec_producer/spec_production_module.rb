@@ -209,7 +209,7 @@ module SpecProductionModule
       file_name = "#{file.gsub('app/', 'spec/')}_spec.rb"
       final_text = "require '#{require_helper_string}'\n\n"
       final_text << "describe '#{file.gsub('app/views/', '')}', :type => :view do\n"
-      final_text << "  let(:page) { Capybara::Node::Simple.new(rendered) }\n"
+      final_text << "  let(:page) { Capybara::Node::Simple.new(rendered) }\n\n"
       final_text << "  subject { page }\n\n"
       final_text << "  before do\n"
 
