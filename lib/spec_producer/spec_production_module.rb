@@ -100,6 +100,8 @@ module SpecProductionModule
     nil
   rescue NameError
     puts "ActiveRecord is not set for this project. Skipping model specs production."
+  rescue Exception => e
+    puts "Exception '#{e}' was raised. Skipping model specs production."
   end
 
   def self.produce_specs_for_routes
@@ -179,6 +181,8 @@ module SpecProductionModule
     end
 
     nil
+  rescue Exception => e
+    puts "Exception '#{e}' was raised. Skipping route specs production."
   end
 
   def self.produce_specs_for_views
@@ -240,6 +244,8 @@ module SpecProductionModule
     end
 
     nil
+  rescue Exception => e
+    puts "Exception '#{e}' was raised. Skipping view specs production."
   end
 
   def self.produce_specs_for_helpers
@@ -274,6 +280,8 @@ module SpecProductionModule
     end
 
     nil
+  rescue Exception => e
+    puts "Exception '#{e}' was raised. Skipping helper specs production."
   end
 
   def self.produce_specs_for_controllers
@@ -323,6 +331,8 @@ module SpecProductionModule
     end
 
     nil
+  rescue Exception => e
+    puts "Exception '#{e}' was raised. Skipping controller specs production."
   end
 
   #######
