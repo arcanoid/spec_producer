@@ -3,8 +3,10 @@ module SpecProductionModule
     Dir.glob(Rails.root.join('app/models/*.rb')).each do |x|
       require x
     end
+    
+    not_valid_descendants = [ ActiveRecord::SchemaMigration, Delayed::Backend::ActiveRecord::Job ]
 
-    ActiveRecord::Base.descendants.each do |descendant|
+    ActiveRecord::Base.descendants.reject { |descendant| not_valid_descendants.include? descendant }.each do |descendant|
       final_text = "require '#{require_helper_string}'\n\n"
       final_text << "describe #{descendant.name}, :type => :model do\n"
 
