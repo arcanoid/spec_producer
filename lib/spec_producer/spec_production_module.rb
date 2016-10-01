@@ -205,6 +205,8 @@ module SpecProductionModule
       file_content = File.read(file)
       fields_in_file = file_content.scan(/(check_box_tag|text_field_tag|text_area_tag|select_tag|email_field_tag|color_field_tag|date_field_tag|datetime_field_tag|datetime_local_field_tag|hidden_field_tag|password_field_tag|phone_field_tag|radio_button_tag) \:(?<field>[a-zA-Z_]*)/).flatten.uniq
       objects_in_file = file_content.scan(/@(?<field>[a-zA-Z_]*)/).flatten.uniq
+      templates_in_file = file_content.scan(/render ('|")(?<template>\S*)('|")/).flatten.uniq
+      partials_in_file = file_content.scan(/render :partial => ('|")(?<partial>\S*)('|")/).flatten.uniq
 
       file_name = "#{file.gsub('app/', 'spec/')}_spec.rb"
       final_text = "require '#{require_helper_string}'\n\n"
@@ -220,11 +222,19 @@ module SpecProductionModule
       final_text << "    render\n"
       final_text << "  end\n\n"
 
-      if fields_in_file.size > 0
+      if fields_in_file.size > 0 || templates_in_file.size > 0 || partials_in_file.size > 0
         final_text << "  describe 'content' do\n"
 
         fields_in_file.each do |field_name|
           final_text << "    it { should have_field '#{field_name }' }\n"
+        end
+ 
+        templates_in_file.each do |template_name|
+          final_text << "    it { should render_template '#{template_name }' }\n"
+        end
+
+        partials_in_file.each do |partial_name|
+          final_text << "    it { should render_template(:partial => '#{partial_name }') }\n"
         end
 
         final_text << "    pending 'view content test'\n"
