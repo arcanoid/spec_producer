@@ -284,6 +284,42 @@ module SpecProductionModule
     puts "Exception '#{e}' was raised. Skipping helper specs production."
   end
 
+  def self.produce_specs_for_mailers
+    files_list = Dir["app/mailers/**/*.rb"]
+
+    files_list.each do |file|
+      full_path = 'spec'
+      File.dirname(file.gsub('app/', 'spec/')).split('/').reject { |path| path == 'spec' }.each do |path|
+        unless /.*\.rb/.match path
+          full_path << "/#{path}"
+
+          unless Dir.exists? full_path
+            Dir.mkdir(Rails.root.join(full_path))
+          end
+        end
+      end
+
+      file_name = "#{file.gsub('app/', 'spec/').gsub('.rb', '')}_spec.rb"
+      final_text = "require '#{require_helper_string}'\n\n"
+      final_text << "describe #{File.basename(file, ".rb").camelcase}, :type => :mailer do\n"
+      final_text << "  pending 'mailer tests'\n"
+      final_text << "end"
+
+      check_if_spec_file_exists
+
+      unless FileTest.exists?(file_name)
+        puts "Producing helper spec file for: #{file_name}"
+        f = File.open(file_name, 'wb+')
+        f.write(final_text)
+        f.close
+      end
+    end
+
+    nil
+  rescue Exception => e
+    puts "Exception '#{e}' was raised. Skipping mailer specs production."
+  end
+
   def self.produce_specs_for_controllers
     Dir.glob(Rails.root.join('app/controllers/**/*.rb')).each do |x|
       require x
