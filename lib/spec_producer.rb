@@ -130,6 +130,8 @@ module SpecProducer
     nil
   rescue NameError
     puts "ActiveRecord is not set for this project. Can't produce factories for this project."
+  rescue Exception => e
+    puts "Exception '#{e}' was raised. Skipping factories production."
   end
 
   def self.print_all_missing_spec_files
