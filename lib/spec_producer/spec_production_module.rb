@@ -82,10 +82,7 @@ module SpecProductionModule
         puts "\n"
         puts final_text
       else
-        unless Dir.exists? Rails.root.join("spec")
-          puts "Generating spec directory"
-          Dir.mkdir(Rails.root.join("spec"))
-        end
+        check_if_spec_file_exists
 
         unless Dir.exists? Rails.root.join("spec/models")
           puts "Generating spec/models directory"
@@ -149,10 +146,7 @@ module SpecProductionModule
           puts final_text
         end
       else
-        unless Dir.exists? Rails.root.join("spec")
-          puts "Generating spec directory"
-          Dir.mkdir(Rails.root.join("spec"))
-        end
+        check_if_spec_file_exists
 
         unless Dir.exists? Rails.root.join("spec/routing")
           puts "Generating spec/routing directory"
@@ -232,14 +226,10 @@ module SpecProductionModule
       else
         final_text << "  skip 'view content test'\n"
       end
-
       
       final_text << "end\n"
 
-      unless Dir.exists? Rails.root.join("spec")
-        puts "Generating spec directory"
-        Dir.mkdir(Rails.root.join("spec"))
-      end
+      check_if_spec_file_exists
 
       unless FileTest.exists?(file_name)
         puts "Producing view spec file for: #{file_name}"
@@ -273,10 +263,7 @@ module SpecProductionModule
       final_text << "  skip 'view helper tests'\n"
       final_text << "end"
 
-      unless Dir.exists? Rails.root.join("spec")
-        puts "Generating spec directory"
-        Dir.mkdir(Rails.root.join("spec"))
-      end
+      check_if_spec_file_exists
 
       unless FileTest.exists?(file_name)
         puts "Producing helper spec file for: #{file_name}"
@@ -325,10 +312,7 @@ module SpecProductionModule
 
       final_text << "end\n"
 
-      unless Dir.exists? Rails.root.join("spec")
-        puts "Generating spec directory"
-        Dir.mkdir(Rails.root.join("spec"))
-      end
+      check_if_spec_file_exists
 
       unless FileTest.exists?(file_name)
         puts "Producing controller spec file for: #{file_name}"
@@ -389,7 +373,15 @@ module SpecProductionModule
     end
   end
 
+  def self.check_if_spec_file_exists
+     unless Dir.exists? Rails.root.join("spec")
+        puts "Generating spec directory"
+        Dir.mkdir(Rails.root.join("spec"))
+      end
+  end
+
   private_class_method :produce_association_options
   private_class_method :require_helper_string
   private_class_method :collect_helper_strings
+  private_class_method :check_if_spec_file_exists
 end
