@@ -212,11 +212,16 @@ module SpecProductionModule
       final_text = "require '#{require_helper_string}'\n\n"
       final_text << "describe '#{file.gsub('app/views/', '')}', :type => :view do\n"
       final_text << "  let(:page) { Capybara::Node::Simple.new(rendered) }\n\n"
+
+      objects_in_file.each do |object|
+        final_text << "  let(:#{object}) { '#{object}' }\n"
+      end
+      
       final_text << "  subject { page }\n\n"
       final_text << "  before do\n"
 
       objects_in_file.each do |object|
-        final_text << "    assign(:#{object}, '#{object}')\n"
+        final_text << "    assign(:#{object}, #{object})\n"
       end
 
       final_text << "    render\n"
