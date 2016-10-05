@@ -1,3 +1,14 @@
+## 0.9.0 (2016-10-06)
+
+* Ignore optional parameters when producing routing specs
+* Read helper that might be used already in the existing specs
+* Adds new set_up_necessities method that checks whether necessary gems exist in the gemfile and if not updates it.
+* aDDS new method for producing factories for each model
+* Adds more info in the view specs produced
+* Print missing specs files for mailers and jobs
+* Produce specs for mailers and jobs
+
+
 ## 0.8.0 (2016-08-30)
 
 Fixes:
