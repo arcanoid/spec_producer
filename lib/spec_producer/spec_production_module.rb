@@ -282,7 +282,7 @@ module SpecProductionModule
 
       file_name = "#{file.gsub('app/', 'spec/').gsub('.rb', '')}_spec.rb"
       final_text = "require '#{require_helper_string}'\n\n"
-      final_text << "describe #{File.basename(file, ".rb").camelcase}, :type => :helper do\n"
+      final_text << "describe #{file.gsub('app/helpers/', '').gsub('.rb', '').split('/').map { |x| x.camelcase }.join('::')}, :type => :helper do\n"
       final_text << "  pending 'view helper tests'\n"
       final_text << "end"
 
