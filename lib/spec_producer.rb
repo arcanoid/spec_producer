@@ -1,6 +1,7 @@
 require "spec_producer/version"
 require "spec_producer/missing_files_module"
 require "spec_producer/spec_production_module"
+require "spec_producer/factories_production_module"
 
 module SpecProducer
   def self.produce_specs_for_all_types
@@ -130,10 +131,7 @@ module SpecProducer
     end
 
     nil
-  rescue NameError
-    puts "ActiveRecord is not set for this project. Can't produce factories for this project."
-  rescue Exception => e
-    puts "Exception '#{e}' was raised. Skipping factories production."
+    FactoriesProductionModule.produce_factories
   end
 
   def self.print_all_missing_spec_files
