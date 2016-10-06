@@ -1,3 +1,11 @@
+## 0.10.0 (2016-10-07)
+
+Features:
+* Allow clients to set namespace in options for missing resources
+
+Fixes:
+* Problem with missing resources methods due to typo.
+
 ## 0.9.0 (2016-10-06)
 
 * Ignore optional parameters when producing routing specs
