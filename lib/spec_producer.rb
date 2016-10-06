@@ -134,36 +134,36 @@ module SpecProducer
     FactoriesProductionModule.produce_factories
   end
 
-  def self.print_all_missing_spec_files
-    MissingFiles.print_missing_model_specs
-    MissingFiles.print_missing_controller_specs
-    MissingFiles.print_missing_helper_specs
-    MissingFiles.print_missing_view_specs
-    MissingFiles.print_missing_mailer_specs
-    MissingFiles.print_missing_job_specs
+  def self.print_all_missing_spec_files(options = {})
+    MissingFilesModule.print_missing_model_specs(options)
+    MissingFilesModule.print_missing_controller_specs(options)
+    MissingFilesModule.print_missing_helper_specs(options)
+    MissingFilesModule.print_missing_view_specs(options)
+    MissingFilesModule.print_missing_mailer_specs(options)
+    MissingFilesModule.print_missing_job_specs(options)
   end
 
-  def self.print_missing_model_specs
-    MissingFiles.print_missing_model_specs
+  def self.print_missing_model_specs(options = {})
+    MissingFilesModule.print_missing_model_specs(options)
   end
 
-  def self.print_missing_controller_specs
-    MissingFiles.print_missing_controller_specs
+  def self.print_missing_controller_specs(options = {})
+    MissingFilesModule.print_missing_controller_specs(options)
   end
 
-  def self.print_missing_helper_specs
-    MissingFiles.print_missing_helper_specs
+  def self.print_missing_helper_specs(options = {})
+    MissingFilesModule.print_missing_helper_specs(options)
   end
 
-  def self.print_missing_view_specs
-    MissingFiles.print_missing_view_specs
+  def self.print_missing_view_specs(options = {})
+    MissingFilesModule.print_missing_view_specs(options)
   end
 
-  def self.print_missing_mailer_specs
-    MissingFiles.print_missing_mailer_specs
+  def self.print_missing_mailer_specs(options = {})
+    MissingFilesModule.print_missing_mailer_specs(options)
   end
 
-  def self.print_missing_job_specs
-    MissingFiles.print_missing_job_specs
+  def self.print_missing_job_specs(options = {})
+    MissingFilesModule.print_missing_job_specs(options)
   end
 end
