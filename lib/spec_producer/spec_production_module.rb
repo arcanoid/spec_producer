@@ -78,13 +78,17 @@ module SpecProducer::SpecProductionModule
       final_text << "end"
 
       if File.exists?(Rails.root.join("spec/models/#{descendant.name.underscore}_spec.rb"))
-        puts '#'*100
-        puts "Please, check whether the following lines are included in: " + descendant.name.underscore + "_spec.rb\n"
-        puts '#'*100
-        puts "\n"
-        puts final_text
+        if File.open(Rails.root.join("spec/models/#{descendant.name.underscore}_spec.rb")).read == final_text
+          # nothing to do here, pre-existing content is the same :)
+        else
+          puts '#'*100
+          puts "Please, check whether the following lines are included in: " + descendant.name.underscore + "_spec.rb\n"
+          puts '#'*100
+          puts "\n"
+          puts final_text
+        end
       else
-        check_if_spec_file_exists
+        check_if_spec_folder_exists
 
         unless Dir.exists? Rails.root.join("spec/models")
           puts "Generating spec/models directory"
@@ -150,7 +154,7 @@ module SpecProducer::SpecProductionModule
           puts final_text
         end
       else
-        check_if_spec_file_exists
+        check_if_spec_folder_exists
 
         unless Dir.exists? Rails.root.join("spec/routing")
           puts "Generating spec/routing directory"
@@ -250,9 +254,19 @@ module SpecProducer::SpecProductionModule
       
       final_text << "end\n"
 
-      check_if_spec_file_exists
+      check_if_spec_folder_exists
 
-      unless FileTest.exists?(file_name)
+      if File.exists?(Rails.root.join(file_name))
+        if File.open(Rails.root.join(file_name)).read == final_text
+          # nothing to do here, pre-existing content is the same :)
+        else
+          puts '#'*100
+          puts "Please, check whether the following lines are included in: " + file_name + "\n"
+          puts '#'*100
+          puts "\n"
+          puts final_text
+        end
+      else
         puts "Producing view spec file for: #{file_name}"
         f = File.open(file_name, 'wb+')
         f.write(final_text)
@@ -286,9 +300,19 @@ module SpecProducer::SpecProductionModule
       final_text << "  pending 'view helper tests'\n"
       final_text << "end"
 
-      check_if_spec_file_exists
+      check_if_spec_folder_exists
 
-      unless FileTest.exists?(file_name)
+      if File.exists?(Rails.root.join(file_name))
+        if File.open(Rails.root.join(file_name)).read == final_text
+          # nothing to do here, pre-existing content is the same :)
+        else
+          puts '#'*100
+          puts "Please, check whether the following lines are included in: " + file_name + "\n"
+          puts '#'*100
+          puts "\n"
+          puts final_text
+        end
+      else
         puts "Producing helper spec file for: #{file_name}"
         f = File.open(file_name, 'wb+')
         f.write(final_text)
@@ -322,9 +346,19 @@ module SpecProducer::SpecProductionModule
       final_text << "  pending 'mailer tests'\n"
       final_text << "end"
 
-      check_if_spec_file_exists
+      check_if_spec_folder_exists
 
-      unless FileTest.exists?(file_name)
+      if File.exists?(Rails.root.join(file_name))
+        if File.open(Rails.root.join(file_name)).read == final_text
+          # nothing to do here, pre-existing content is the same :)
+        else
+          puts '#'*100
+          puts "Please, check whether the following lines are included in: " + file_name + "\n"
+          puts '#'*100
+          puts "\n"
+          puts final_text
+        end
+      else
         puts "Producing helper spec file for: #{file_name}"
         f = File.open(file_name, 'wb+')
         f.write(final_text)
@@ -358,9 +392,19 @@ module SpecProducer::SpecProductionModule
       final_text << "  pending 'job tests'\n"
       final_text << "end"
 
-      check_if_spec_file_exists
+      check_if_spec_folder_exists
 
-      unless FileTest.exists?(file_name)
+      if File.exists?(Rails.root.join(file_name))
+        if File.open(Rails.root.join(file_name)).read == final_text
+          # nothing to do here, pre-existing content is the same :)
+        else
+          puts '#'*100
+          puts "Please, check whether the following lines are included in: " + file_name + "\n"
+          puts '#'*100
+          puts "\n"
+          puts final_text
+        end
+      else
         puts "Producing helper spec file for: #{file_name}"
         f = File.open(file_name, 'wb+')
         f.write(final_text)
@@ -410,9 +454,19 @@ module SpecProducer::SpecProductionModule
 
       final_text << "end\n"
 
-      check_if_spec_file_exists
+      check_if_spec_folder_exists
 
-      unless FileTest.exists?(file_name)
+      if File.exists?(Rails.root.join(file_name))
+        if File.open(Rails.root.join(file_name)).read == final_text
+          # nothing to do here, pre-existing content is the same :)
+        else
+          puts '#'*100
+          puts "Please, check whether the following lines are included in: " + file_name + "\n"
+          puts '#'*100
+          puts "\n"
+          puts final_text
+        end
+      else
         puts "Producing controller spec file for: #{file_name}"
         f = File.open(file_name, 'wb+')
         f.write(final_text)
@@ -473,7 +527,7 @@ module SpecProducer::SpecProductionModule
     end
   end
 
-  def self.check_if_spec_file_exists
+  def self.check_if_spec_folder_exists
      unless Dir.exists? Rails.root.join("spec")
         puts "Generating spec directory"
         Dir.mkdir(Rails.root.join("spec"))
@@ -483,5 +537,5 @@ module SpecProducer::SpecProductionModule
   private_class_method :produce_association_options
   private_class_method :require_helper_string
   private_class_method :collect_helper_strings
-  private_class_method :check_if_spec_file_exists
+  private_class_method :check_if_spec_folder_exists
 end
