@@ -1,4 +1,4 @@
-module MissingFilesModule
+module SpecProducer::MissingFilesModule
   def self.print_missing_model_specs
     files_list = Dir["app/models/**/*.rb"]
 
