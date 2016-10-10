@@ -211,6 +211,7 @@ module SpecProducer::SpecProductionModule
       objects_in_file = file_content.scan(/@(?<field>[a-zA-Z_]*)/).flatten.uniq
       templates_in_file = file_content.scan(/render ('|")(?<template>\S*)('|")/).flatten.uniq
       partials_in_file = file_content.scan(/render :partial => ('|")(?<partial>\S*)('|")/).flatten.uniq
+      links_in_file = file_content.scan(/<a.*href=\"(\S*)\".*>(.*)<\/a>/).uniq
 
       file_name = "#{file.gsub('app/', 'spec/')}_spec.rb"
       final_text = "require '#{require_helper_string}'\n\n"
@@ -231,27 +232,29 @@ module SpecProducer::SpecProductionModule
       final_text << "    render\n"
       final_text << "  end\n\n"
 
-      if fields_in_file.size > 0 || templates_in_file.size > 0 || partials_in_file.size > 0
-        final_text << "  describe 'content' do\n"
+      final_text << "  describe 'content' do\n"
 
-        fields_in_file.each do |field_name|
-          final_text << "    it { should have_field '#{field_name }' }\n"
-        end
- 
-        templates_in_file.each do |template_name|
-          final_text << "    it { should render_template '#{template_name }' }\n"
-        end
+      fields_in_file.each do |field_name|
+        final_text << "    it { should have_field '#{ field_name }' }\n"
+      end  
 
-        partials_in_file.each do |partial_name|
-          final_text << "    it { should render_template(:partial => '#{partial_name }') }\n"
-        end
+      templates_in_file.each do |template_name|
+        template_path_elements = template_name.split('/')
+        template_path_elements.last.gsub!(/^/, '_')
 
-        final_text << "    pending 'view content test'\n"
-        final_text << "  end\n"
-      else
-        final_text << "  pending 'view content test'\n"
+        final_text << "    it { should render_template '#{ template_path_elements.join('/') }' }\n"
       end
-      
+
+      partials_in_file.each do |partial_name|
+        final_text << "    it { should render_template(:partial => '#{ partial_name }') }\n"
+      end
+
+      links_in_file.each do |link|
+        final_text << "    it { should have_link '#{link[1]}', :href => '#{link[0]}' }\n"
+      end
+
+      final_text << "    pending 'view content test'\n"
+      final_text << "  end\n"
       final_text << "end\n"
 
       check_if_spec_folder_exists
