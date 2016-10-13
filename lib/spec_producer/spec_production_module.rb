@@ -408,7 +408,7 @@ module SpecProducer::SpecProductionModule
           puts final_text
         end
       else
-        puts "Producing helper spec file for: #{file_name}"
+        puts "Producing job spec file for: #{file_name}"
         f = File.open(file_name, 'wb+')
         f.write(final_text)
         f.close
@@ -420,6 +420,58 @@ module SpecProducer::SpecProductionModule
     puts "Exception '#{e}' was raised. Skipping job specs production."
   end
 
+  def self.produce_specs_for_serializers
+    files_list = Dir["app/serializers/**/*.rb"]
+
+    files_list.each do |file|
+      full_path = 'spec'
+      File.dirname(file.gsub('app/', 'spec/')).split('/').reject { |path| path == 'spec' }.each do |path|
+        unless /.*\.rb/.match path
+          full_path << "/#{path}"
+
+          unless Dir.exists? full_path
+            Dir.mkdir(Rails.root.join(full_path))
+          end
+        end
+      end
+
+      file_name = "#{file.gsub('app/', 'spec/').gsub('.rb', '')}_spec.rb"
+      final_text = "require '#{require_helper_string}'\n\n"
+      final_text << "describe #{File.basename(file, ".rb").camelcase}, :type => :serializer do\n"
+      final_text << "  pending 'serializer tests do'\n"
+      final_text << "    let(:content) { FactoryGirl.build(:#{File.basename(file, ".rb").gsub('_serializer', '')}}) }\n\n"
+      final_text << "    subject { #{File.basename(file, ".rb").camelcase}.new(sample) }\n"
+      final_text << "    it 'includes the expected attributes' do\n"
+      final_text << "      expect(subject.attributes.keys).to contain_exactly(:sample_key, :another_sample_key)\n"
+      final_text << "      expect(subject).to eq({})\n"
+      final_text << "    end\n"
+      final_text << "  end\n"
+      final_text << "end"
+
+      check_if_spec_folder_exists
+
+      if File.exists?(Rails.root.join(file_name))
+        if File.open(Rails.root.join(file_name)).read == final_text
+          # nothing to do here, pre-existing content is the same :)
+        else
+          puts '#'*100
+          puts "Please, check whether the following lines are included in: " + file_name + "\n"
+          puts '#'*100
+          puts "\n"
+          puts final_text
+        end
+      else
+        puts "Producing serializer spec file for: #{file_name}"
+        f = File.open(file_name, 'wb+')
+        f.write(final_text)
+        f.close
+      end
+    end
+
+    nil
+  rescue Exception => e
+    puts "Exception '#{e}' was raised. Skipping serializer specs production."
+  end
 
   def self.produce_specs_for_controllers
     Dir.glob(Rails.root.join('app/controllers/**/*.rb')).each do |x|

@@ -13,6 +13,7 @@ module SpecProducer
     SpecProductionModule.produce_specs_for_helpers
     SpecProductionModule.produce_specs_for_mailers
     SpecProductionModule.produce_specs_for_jobs
+    SpecProductionModule.produce_specs_for_serializers
   end
 
   def self.produce_specs_for_models
@@ -41,6 +42,10 @@ module SpecProducer
 
   def self.produce_specs_for_jobs
     SpecProductionModule.produce_specs_for_jobs
+  end
+
+  def self.produce_specs_for_serializers
+    SpecProductionModule.produce_specs_for_serializers
   end
 
   def self.set_up_necessities
