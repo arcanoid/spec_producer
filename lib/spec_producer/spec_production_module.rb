@@ -421,48 +421,46 @@ module SpecProducer::SpecProductionModule
   end
 
   def self.produce_specs_for_serializers
-    files_list = Dir["app/serializers/**/*.rb"]
+    Dir.glob(Rails.root.join('app/serializers/*.rb')).each do |x|
+      require x
+    end
 
-    files_list.each do |file|
-      full_path = 'spec'
-      File.dirname(file.gsub('app/', 'spec/')).split('/').reject { |path| path == 'spec' }.each do |path|
-        unless /.*\.rb/.match path
-          full_path << "/#{path}"
+    not_valid_descendants = [ ActiveModel::Serializer::ErrorSerializer ]
 
-          unless Dir.exists? full_path
-            Dir.mkdir(Rails.root.join(full_path))
-          end
-        end
-      end
-
-      file_name = "#{file.gsub('app/', 'spec/').gsub('.rb', '')}_spec.rb"
+    ActiveModel::Serializer.descendants.reject { |descendant| not_valid_descendants.include? descendant }.each do |descendant|
       final_text = "require '#{require_helper_string}'\n\n"
-      final_text << "describe #{File.basename(file, ".rb").camelcase}, :type => :serializer do\n"
-      final_text << "  pending 'serializer tests do'\n"
-      final_text << "    let(:content) { FactoryGirl.build(:#{File.basename(file, ".rb").gsub('_serializer', '')}}) }\n\n"
-      final_text << "    subject { #{File.basename(file, ".rb").camelcase}.new(sample) }\n"
+      final_text << "describe #{descendant.name}, :type => :serializer do\n"
+
+      final_text << "  describe 'serializer tests' do\n"
+      final_text << "    subject { #{descendant.name}.new(FactoryGirl.build(:#{descendant.name.underscore.gsub('_serializer', '')})) }\n\n"
       final_text << "    it 'includes the expected attributes' do\n"
-      final_text << "      expect(subject.attributes.keys).to contain_exactly(:sample_key, :another_sample_key)\n"
-      final_text << "      expect(subject).to eq({})\n"
+      final_text << "      expect(subject.attributes.keys).to contain_exactly(#{descendant._attributes.map { |x| ":#{x.to_s}" }.join(', ')})\n"
+      final_text << "      expect(subject.attributes).to eq({})\n"
       final_text << "    end\n"
       final_text << "  end\n"
       final_text << "end"
 
-      check_if_spec_folder_exists
-
-      if File.exists?(Rails.root.join(file_name))
-        if File.open(Rails.root.join(file_name)).read == final_text
+      if File.exists?(Rails.root.join("spec/serializers/#{descendant.name.underscore}_spec.rb"))
+        if File.open(Rails.root.join("spec/serializers/#{descendant.name.underscore}_spec.rb")).read == final_text
           # nothing to do here, pre-existing content is the same :)
         else
           puts '#'*100
-          puts "Please, check whether the following lines are included in: " + file_name + "\n"
+          puts "Please, check whether the following lines are included in: " + descendant.name.underscore + "_spec.rb\n"
           puts '#'*100
           puts "\n"
           puts final_text
         end
       else
-        puts "Producing serializer spec file for: #{file_name}"
-        f = File.open(file_name, 'wb+')
+        check_if_spec_folder_exists
+
+        unless Dir.exists? Rails.root.join("spec/serializers")
+          puts "Generating spec/serializers directory"
+          Dir.mkdir(Rails.root.join("spec/serializers"))
+        end
+
+        path = "spec/serializers/#{descendant.name.underscore}_spec.rb"
+        puts "Producing serializer spec file for: #{path}"
+        f = File.open("#{Rails.root.join(path)}", 'wb+')
         f.write(final_text)
         f.close
       end
