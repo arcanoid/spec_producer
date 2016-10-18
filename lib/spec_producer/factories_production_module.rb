@@ -60,8 +60,8 @@ module SpecProducer::FactoriesProductionModule
     end
 
     nil
-  rescue NameError
-    puts "ActiveRecord is not set for this project. Can't produce factories for this project."
+  rescue NameError => e
+    puts "NameError '#{e}' was raised. Can't produce factories for this project."
   rescue Exception => e
     puts "Exception '#{e}' was raised. Skipping factories production."
   end
