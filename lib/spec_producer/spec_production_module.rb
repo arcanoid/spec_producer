@@ -283,11 +283,12 @@ module SpecProducer::SpecProductionModule
   end
 
   def self.produce_specs_for_helpers
-    files_list = Dir["app/helpers/**/*.rb"]
+    helpers_list = ActionController::Base.modules_for_helpers(ActionController::Base.all_helpers_from_path 'app/helpers')
 
-    files_list.each do |file|
+    helpers_list.each do |helper|
+      file_name = "spec/helpers/#{helper.name.gsub("::", "/").underscore}_spec.rb"
       full_path = 'spec'
-      File.dirname(file.gsub('app/', 'spec/')).split('/').reject { |path| path == 'spec' }.each do |path|
+      file_name.gsub("spec/", "").split("/").each do |path|
         unless /.*\.rb/.match path
           full_path << "/#{path}"
 
@@ -297,10 +298,12 @@ module SpecProducer::SpecProductionModule
         end
       end
 
-      file_name = "#{file.gsub('app/', 'spec/').gsub('.rb', '')}_spec.rb"
       final_text = "require '#{require_helper_string}'\n\n"
-      final_text << "describe #{file.gsub('app/helpers/', '').gsub('.rb', '').split('/').map { |x| x.camelcase }.join('::')}, :type => :helper do\n"
-      final_text << "  pending 'view helper tests'\n"
+      final_text << "describe #{helper}, :type => :helper do\n"
+      helper.instance_methods.each do |method_name|
+        final_text << "  pending '#{method_name.to_s}'\n"
+      end
+
       final_text << "end"
 
       check_if_spec_folder_exists
