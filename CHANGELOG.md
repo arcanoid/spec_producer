@@ -1,3 +1,12 @@
+## 0.11.0 (2016-10-18)
+
+Features:
+* Add serializer specs production
+* Fixes in view specs
+* Handle missing Delayed Jobssetup
+* Update helper specs to include helper methods
+* Logs in name error now describe the error as well.
+
 ## 0.10.0 (2016-10-07)
 
 Features:
