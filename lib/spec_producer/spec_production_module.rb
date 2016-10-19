@@ -218,6 +218,7 @@ module SpecProducer::SpecProductionModule
       links_in_file = file_content.scan(/<a.*href=\"(\S*)\".*>(.*)<\/a>/).uniq
       conditions_in_file = file_content.scan(/if (?<condition>.*)%>/).flatten.uniq
       unless_conditions_in_file = file_content.scan(/unless (?<condition>.*)%>/).flatten.uniq
+      submit_tags_in_file = file_content.scan(/submit_tag (?<value>.*),/).flatten.uniq
 
       file_name = "#{file.gsub('app/', 'spec/')}_spec.rb"
       final_text = "require '#{require_helper_string}'\n\n"
@@ -242,6 +243,10 @@ module SpecProducer::SpecProductionModule
 
       fields_in_file.each do |field_name|
         final_text << "    it { should have_field '#{ field_name }' }\n"
+      end  
+
+      submit_tags_in_file.each do |field_name|
+        final_text << "    it { should have_css \"input[type='submit'][name=#{ field_name }]\" }\n"
       end  
 
       templates_in_file.each do |template_name|
