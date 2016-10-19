@@ -4,7 +4,11 @@ module SpecProducer::SpecProductionModule
       require x
     end
     
-    not_valid_descendants = [ ActiveRecord::SchemaMigration, Delayed::Backend::ActiveRecord::Job ]
+    not_valid_descendants = [ ActiveRecord::SchemaMigration ]
+
+    if Object.const_defined?('Delayed')
+      not_valid_descendants << Delayed::Backend::ActiveRecord::Job
+    end
 
     ActiveRecord::Base.descendants.reject { |descendant| not_valid_descendants.include? descendant }.each do |descendant|
       final_text = "require '#{require_helper_string}'\n\n"
