@@ -229,7 +229,7 @@ module SpecProducer::SpecProductionModule
         final_text << "  let(:#{object}) { '#{object}' }\n"
       end
       
-      final_text << "  subject { page }\n\n"
+      final_text << "\n  subject { page }\n\n"
       final_text << "  before do\n"
 
       objects_in_file.each do |object|
