@@ -216,6 +216,8 @@ module SpecProducer::SpecProductionModule
       templates_in_file = file_content.scan(/render ('|")(?<template>\S*)('|")/).flatten.uniq
       partials_in_file = file_content.scan(/render :partial => ('|")(?<partial>\S*)('|")/).flatten.uniq
       links_in_file = file_content.scan(/<a.*href=\"(\S*)\".*>(.*)<\/a>/).uniq
+      conditions_in_file = file_content.scan(/if (?<condition>.*)%>/).flatten.uniq
+      unless_conditions_in_file = file_content.scan(/unless (?<condition>.*)%>/).flatten.uniq
 
       file_name = "#{file.gsub('app/', 'spec/')}_spec.rb"
       final_text = "require '#{require_helper_string}'\n\n"
@@ -255,6 +257,14 @@ module SpecProducer::SpecProductionModule
 
       links_in_file.each do |link|
         final_text << "    it { should have_link '#{link[1]}', :href => '#{link[0]}' }\n"
+      end
+
+      conditions_in_file.each do |condition|
+        final_text << "    pending 'if #{condition}'\n"
+      end
+
+      unless_conditions_in_file.each do |condition|
+        final_text << "    pending 'unless #{condition}'\n"
       end
 
       final_text << "    pending 'view content test'\n"
