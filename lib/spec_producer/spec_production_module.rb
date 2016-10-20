@@ -458,8 +458,12 @@ module SpecProducer::SpecProductionModule
       final_text << "    it 'includes the expected attribute keys' do\n"
       final_text << "      expect(subject.attributes.keys).to contain_exactly(#{descendant._attributes.map { |x| ":#{x.to_s}" }.join(', ')})\n"
       final_text << "    end\n\n"
-      final_text << "    pending 'includes the expected attributes with values' do\n"
-      final_text << "      expect(subject.attributes).to eq({})\n"
+      final_text << "    it 'includes the expected attributes with values' do\n"
+
+      descendant._attributes.map do |x|
+        final_text << "      expect(subject.attributes[:#{x}]).to eq('')\n"
+      end
+      
       final_text << "    end\n"
       final_text << "  end\n"
       final_text << "end"
