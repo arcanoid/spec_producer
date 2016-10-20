@@ -14,7 +14,7 @@ module SpecProducer::FactoriesProductionModule
       final_text = "FactoryGirl.define do\n"
       final_text << "  factory :#{descendant.name.underscore}, :class => #{descendant.name} do\n"
 
-      descendant.columns.each do |column|
+      descendant.columns.reject { |column| ['id', 'created_at', 'updated_at'].include? column.name }.each do |column|
         value = case column.type
                   when :string then "'#{descendant.name.underscore.upcase}_#{column.name.underscore.upcase}'"
                   when :text then "'#{descendant.name.underscore.upcase}_#{column.name.underscore.upcase}'"
@@ -29,6 +29,12 @@ module SpecProducer::FactoriesProductionModule
                 end
 
         final_text << "    #{column.name} #{value}\n"
+      end
+             
+      descendant.reflections.each_pair do |key, reflection|
+        if reflection.macro == :has_one
+          final_text << "    association :#{key.to_s}\n"  
+        end
       end
 
       final_text << "  end\n"
