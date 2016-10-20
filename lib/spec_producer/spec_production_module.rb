@@ -246,7 +246,7 @@ module SpecProducer::SpecProductionModule
       end  
 
       submit_tags_in_file.each do |field_name|
-        final_text << "    it { should have_css \"input[type='submit'][name=#{ field_name }]\" }\n"
+        final_text << "    it { should have_css \"input[type='submit'][value=#{ field_name }]\" }\n"
       end  
 
       templates_in_file.each do |template_name|
@@ -265,11 +265,11 @@ module SpecProducer::SpecProductionModule
       end
 
       conditions_in_file.each do |condition|
-        final_text << "    pending 'if #{condition}'\n"
+        final_text << "    pending 'if #{condition.strip}'\n"
       end
 
       unless_conditions_in_file.each do |condition|
-        final_text << "    pending 'unless #{condition}'\n"
+        final_text << "    pending 'unless #{condition.strip}'\n"
       end
 
       final_text << "    pending 'view content test'\n"
