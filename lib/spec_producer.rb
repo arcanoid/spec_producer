@@ -5,7 +5,6 @@ require "spec_producer/factories_production_module"
 
 module SpecProducer
   def self.produce_specs_for_all_types
-    set_up_necessities
     SpecProductionModule.produce_specs_for_models
     SpecProductionModule.produce_specs_for_routes
     SpecProductionModule.produce_specs_for_views
