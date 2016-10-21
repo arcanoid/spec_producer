@@ -60,6 +60,7 @@ module SpecProducer
       missing_gems << 'factory_girl_rails' unless (gems.include? 'factory_girl_rails')
       missing_gems << 'shoulda-matchers' unless (gems.include? 'shoulda-matchers')
       missing_gems << 'capybara' unless (gems.include? 'capybara')
+      missing_gems << 'webmock' unless (gems.include? 'webmock')
 
       if missing_gems.size > 0
         contents << "\ngroup :test do\n"
