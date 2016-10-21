@@ -58,9 +58,11 @@ module SpecProducer
       missing_gems << 'rspec-rails' unless (gems.include? 'rspec-rails')
       missing_gems << 'factory_girl_rails' unless (gems.include? 'factory_girl_rails')
       missing_gems << 'shoulda-matchers' unless (gems.include? 'shoulda-matchers')
-      missing_gems << 'capybara' unless (gems.include? 'capybara')
       missing_gems << 'webmock' unless (gems.include? 'webmock')
       missing_gems << 'rubocop' unless (gems.include? 'rubocop')  
+
+      # No need for capybara if there are no views to parse
+      missing_gems << 'capybara' unless ((gems.include? 'capybara') && Dir["app/views/**/*.erb"] != [])
 
       if missing_gems.size > 0
         contents << "\ngroup :test do\n"
