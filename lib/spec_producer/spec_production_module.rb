@@ -66,6 +66,11 @@ module SpecProducer::SpecProductionModule
         final_text << "  it { should have_db_column :#{column_name} }\n"
       end
 
+      final_text << "  describe 'valid?'\n"
+      final_text << "    subject { FactoryGirl.build(:#{descendant.name.underscore}).valid? }\n\n"
+      final_text << "    it { should == true }\n"
+      final_text << "  end\n\n"
+
       if descendant.reflections.keys.present?
         final_text << "\n  # Associations\n"
       end
