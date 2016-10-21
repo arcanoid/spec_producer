@@ -65,10 +65,25 @@ module SpecProducer
       missing_gems << 'capybara' unless ((gems.include? 'capybara') && Dir["app/views/**/*.erb"] != [])
 
       if missing_gems.size > 0
+        actions_needed = "You will additionally need to:\n"
+        useful_info = ''
         contents << "\ngroup :test do\n"
 
         missing_gems.each do |gem|
           contents << "  gem '#{gem}'\n"
+
+          if gem == 'rspec-rails'
+            actions_needed << "# Run 'rails generate rspec:install' (More info: https://github.com/rspec/rspec-rails)\n"
+          elsif gem == 'factory_girl_rails'
+            useful_info << "# FactoryGirl: https://github.com/thoughtbot/factory_girl_rails\n"
+          elsif gem == 'shoulda-matchers'
+            useful_info << "# Shoulda Matchers: https://github.com/thoughtbot/shoulda-matchers\n"
+          elsif gem == 'webmock'
+            actions_needed << "# Add 'require \'webmock/rspec\'' in your spec_helper or rails_helper\n"
+            useful_info << "# Webmock: https://github.com/bblimke/webmock\n"
+          elsif gem == 'rubocop'
+            useful_info << "# RuboCop: https://github.com/bbatsov/rubocop\n"
+          end
         end
 
         contents << "end"
@@ -77,6 +92,9 @@ module SpecProducer
       f = File.open(gemfiles.first, 'wb+')
       f.write(contents)
       f.close
+
+      puts actions_needed
+      puts useful_info
     else
       puts "We couldn't find a Gemfile and setting up halted!"
     end
