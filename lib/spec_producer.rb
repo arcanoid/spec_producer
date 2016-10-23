@@ -66,14 +66,15 @@ module SpecProducer
 
       if missing_gems.size > 0
         actions_needed = "You will additionally need to:\n"
-        useful_info = ''
+        useful_info = "\nGems installed:\n"
         contents << "\ngroup :test do\n"
 
         missing_gems.each do |gem|
           contents << "  gem '#{gem}'\n"
 
           if gem == 'rspec-rails'
-            actions_needed << "# Run 'rails generate rspec:install' (More info: https://github.com/rspec/rspec-rails)\n"
+            actions_needed << "# Run 'rails generate rspec:install'"
+            useful_info << "# Rspec: https://github.com/rspec/rspec-rails\n"
           elsif gem == 'factory_girl_rails'
             useful_info << "# FactoryGirl: https://github.com/thoughtbot/factory_girl_rails\n"
           elsif gem == 'shoulda-matchers'
