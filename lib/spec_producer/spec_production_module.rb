@@ -479,7 +479,7 @@ module SpecProducer::SpecProductionModule
       final_text << "    end\n\n"
 
       final_text << "    describe 'to_json'\n"
-      final_text << "      subject { #{descendant.name}.new(FactoryGirl.build(:#{descendant.name.underscore.gsub('_serializer', '')})).to_json }\n\n"
+      final_text << "      subject { JSON.parse(#{descendant.name}.new(FactoryGirl.build(:#{descendant.name.underscore.gsub('_serializer', '')})).to_json) }\n\n"
 
       final_text << "      it 'has the proper values' do\n"
 
