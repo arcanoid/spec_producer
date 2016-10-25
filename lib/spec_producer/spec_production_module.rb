@@ -15,11 +15,11 @@ module SpecProducer::SpecProductionModule
       final_text << "describe #{descendant.name}, :type => :model do\n"
 
       descendant.attribute_names.each do |attribute|
-        final_text << "  it { should respond_to :#{attribute}, :#{attribute}= }\n"
+        final_text << "  it { is_expected.to respond_to :#{attribute}, :#{attribute}= }\n"
       end
 
       descendant.readonly_attributes.each do |attribute|
-        final_text << "  it { should have_readonly_attribute :#{attribute} }\n"
+        final_text << "  it { is_expected.to have_readonly_attribute :#{attribute} }\n"
       end
 
       if descendant.validators.reject { |validator| validator.kind == :associated }.present?
@@ -29,31 +29,31 @@ module SpecProducer::SpecProductionModule
       descendant.validators.each do |validator|
         if validator.kind == :presence
           validator.attributes.each do |attribute|
-            final_text << "  it { should validate_presence_of :#{attribute} }\n"
+            final_text << "  it { is_expected.to validate_presence_of :#{attribute} }\n"
           end
         elsif validator.kind == :uniqueness
           validator.attributes.each do |attribute|
-            final_text << "  it { should validate_uniqueness_of :#{attribute} }\n"
+            final_text << "  it { is_expected.to validate_uniqueness_of :#{attribute} }\n"
           end
         elsif validator.kind == :numericality
           validator.attributes.each do |attribute|
-            final_text << "  it { should validate_numericality_of :#{attribute} }\n"
+            final_text << "  it { is_expected.to validate_numericality_of :#{attribute} }\n"
           end
         elsif validator.kind == :acceptance
           validator.attributes.each do |attribute|
-            final_text << "  it { should validate_acceptance_of :#{attribute} }\n"
+            final_text << "  it { is_expected.to validate_acceptance_of :#{attribute} }\n"
           end
         elsif validator.kind == :confirmation
           validator.attributes.each do |attribute|
-            final_text << "  it { should validate_confirmation_of :#{attribute} }\n"
+            final_text << "  it { is_expected.to validate_confirmation_of :#{attribute} }\n"
           end
         elsif validator.kind == :length
           validator.attributes.each do |attribute|
-            final_text << "  it { should validate_length_of :#{attribute} }\n"
+            final_text << "  it { is_expected.to validate_length_of :#{attribute} }\n"
           end
         elsif validator.kind == :absence
           validator.attributes.each do |attribute|
-            final_text << "  it { should validate_absence_of :#{attribute} }\n"
+            final_text << "  it { is_expected.to validate_absence_of :#{attribute} }\n"
           end
         end
       end
@@ -63,12 +63,12 @@ module SpecProducer::SpecProductionModule
       end
 
       descendant.column_names.each do |column_name|
-        final_text << "  it { should have_db_column :#{column_name} }\n"
+        final_text << "  it { is_expected.to have_db_column :#{column_name} }\n"
       end
 
       final_text << "  describe 'valid?'\n"
       final_text << "    subject { FactoryGirl.build(:#{descendant.name.underscore}).valid? }\n\n"
-      final_text << "    it { should == true }\n"
+      final_text << "    it { is_expected.to eq(true) }\n"
       final_text << "  end\n\n"
 
       if descendant.reflections.keys.present?
@@ -77,10 +77,10 @@ module SpecProducer::SpecProductionModule
 
       descendant.reflections.each_pair do |key, reflection|
         final_text << case reflection.macro
-                        when :belongs_to then "  it { should belong_to(:#{key})#{produce_association_options(reflection)} }\n"
-                        when :has_one then "  it { should have_one(:#{key})#{produce_association_options(reflection)} }\n"
-                        when :has_many then "  it { should have_many(:#{key})#{produce_association_options(reflection)} }\n"
-                        when :has_and_belongs_to_many then "  it { should have_and_belong_to_many(:#{key})#{produce_association_options(reflection)} }\n"
+                        when :belongs_to then "  it { is_expected.to belong_to(:#{key})#{produce_association_options(reflection)} }\n"
+                        when :has_one then "  it { is_expected.to have_one(:#{key})#{produce_association_options(reflection)} }\n"
+                        when :has_many then "  it { is_expected.to have_many(:#{key})#{produce_association_options(reflection)} }\n"
+                        when :has_and_belongs_to_many then "  it { is_expected.to have_and_belong_to_many(:#{key})#{produce_association_options(reflection)} }\n"
                       end
       end
 
