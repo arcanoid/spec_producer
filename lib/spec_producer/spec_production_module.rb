@@ -90,22 +90,22 @@ module SpecProducer::SpecProductionModule
         if File.open(Rails.root.join("spec/models/#{descendant.name.underscore}_spec.rb")).read == final_text
           # nothing to do here, pre-existing content is the same :)
         else
-          puts '#'*100
-          puts "Please, check whether the following lines are included in: " + descendant.name.underscore + "_spec.rb\n"
-          puts '#'*100
-          puts "\n"
+          puts ('#'*100).colorize(:light_blue)
+          puts ("Please, check whether the following lines are included in: " + descendant.name.underscore + "_spec.rb").colorize(:light_blue)
+          puts ('#'*100).colorize(:light_blue)
           puts final_text
+          puts "\n\n"
         end
       else
         check_if_spec_folder_exists
 
         unless Dir.exists? Rails.root.join("spec/models")
-          puts "Generating spec/models directory"
+          puts "Generating spec/models directory".colorize(:yellow)
           Dir.mkdir(Rails.root.join("spec/models"))
         end
 
         path = "spec/models/#{descendant.name.underscore}_spec.rb"
-        puts "Producing model spec file for: #{path}"
+        puts "Producing model spec file for: #{path}".colorize(:green)
         f = File.open("#{Rails.root.join(path)}", 'wb+')
         f.write(final_text)
         f.close
@@ -114,9 +114,9 @@ module SpecProducer::SpecProductionModule
 
     nil
   rescue NameError
-    puts "ActiveRecord is not set for this project. Skipping model specs production."
+    puts "ActiveRecord is not set for this project. Skipping model specs production.".colorize(:red)
   rescue Exception => e
-    puts "Exception '#{e}' was raised. Skipping model specs production."
+    puts "Exception '#{e}' was raised. Skipping model specs production.".colorize(:red)
   end
 
   def self.produce_specs_for_routes
@@ -156,17 +156,17 @@ module SpecProducer::SpecProductionModule
         if File.open(Rails.root.join("spec/routing/#{route_group[0]}_routing_spec.rb")).read == final_text
           # nothing to do here, pre-existing content is the same :)
         else
-          puts '#'*100
-          puts "Please, check whether the following lines are included in: spec/routing/#{route_group[0]}_routing_spec.rb\n"
-          puts '#'*100
-          puts "\n"
+          puts ('#'*100).colorize(:light_blue)
+          puts "Please, check whether the following lines are included in: spec/routing/#{route_group[0]}_routing_spec.rb".colorize(:light_blue)
+          puts ('#'*100).colorize(:light_blue)
           puts final_text
+          puts "\n\n"
         end
       else
         check_if_spec_folder_exists
 
         unless Dir.exists? Rails.root.join("spec/routing")
-          puts "Generating spec/routing directory"
+          puts "Generating spec/routing directory".colorize(:yellow)
           Dir.mkdir(Rails.root.join("spec/routing"))
         end
 
@@ -188,7 +188,7 @@ module SpecProducer::SpecProductionModule
         end
 
         path = "spec/routing/#{route_group[0]}_routing_spec.rb"
-        puts "Producing routing spec file for: #{route_group[0]}"
+        puts "Producing routing spec file for: #{route_group[0]}".colorize(:green)
         f = File.open("#{Rails.root.join(path)}", 'wb+')
         f.write(final_text)
         f.close
@@ -197,7 +197,7 @@ module SpecProducer::SpecProductionModule
 
     nil
   rescue Exception => e
-    puts "Exception '#{e}' was raised. Skipping route specs production."
+    puts "Exception '#{e}' was raised. Skipping route specs production.".colorize(:red)
   end
 
   def self.produce_specs_for_views
@@ -287,14 +287,14 @@ module SpecProducer::SpecProductionModule
         if File.open(Rails.root.join(file_name)).read == final_text
           # nothing to do here, pre-existing content is the same :)
         else
-          puts '#'*100
-          puts "Please, check whether the following lines are included in: " + file_name + "\n"
-          puts '#'*100
-          puts "\n"
+          puts ('#'*100).colorize(:light_blue)
+          puts ("Please, check whether the following lines are included in: " + file_name).colorize(:light_blue)
+          puts ('#'*100).colorize(:light_blue)
           puts final_text
+          puts "\n\n"
         end
       else
-        puts "Producing view spec file for: #{file_name}"
+        puts "Producing view spec file for: #{file_name}".colorize(:green)
         f = File.open(file_name, 'wb+')
         f.write(final_text)
         f.close
@@ -303,7 +303,7 @@ module SpecProducer::SpecProductionModule
 
     nil
   rescue Exception => e
-    puts "Exception '#{e}' was raised. Skipping view specs production."
+    puts "Exception '#{e}' was raised. Skipping view specs production.".colorize(:red)
   end
 
   def self.produce_specs_for_helpers
@@ -336,14 +336,14 @@ module SpecProducer::SpecProductionModule
         if File.open(Rails.root.join(file_name)).read == final_text
           # nothing to do here, pre-existing content is the same :)
         else
-          puts '#'*100
-          puts "Please, check whether the following lines are included in: " + file_name + "\n"
-          puts '#'*100
-          puts "\n"
+          puts ('#'*100).colorize(:light_blue)
+          puts ("Please, check whether the following lines are included in: " + file_name).colorize(:light_blue)
+          puts ('#'*100).colorize(:light_blue)
           puts final_text
+          puts "\n\n"
         end
       else
-        puts "Producing helper spec file for: #{file_name}"
+        puts "Producing helper spec file for: #{file_name}".colorize(:green)
         f = File.open(file_name, 'wb+')
         f.write(final_text)
         f.close
@@ -352,7 +352,7 @@ module SpecProducer::SpecProductionModule
 
     nil
   rescue Exception => e
-    puts "Exception '#{e}' was raised. Skipping helper specs production."
+    puts "Exception '#{e}' was raised. Skipping helper specs production.".colorize(:red)
   end
 
   def self.produce_specs_for_mailers
@@ -382,14 +382,14 @@ module SpecProducer::SpecProductionModule
         if File.open(Rails.root.join(file_name)).read == final_text
           # nothing to do here, pre-existing content is the same :)
         else
-          puts '#'*100
-          puts "Please, check whether the following lines are included in: " + file_name + "\n"
-          puts '#'*100
-          puts "\n"
+          puts ('#'*100).colorize(:light_blue)
+          puts ("Please, check whether the following lines are included in: " + file_name).colorize(:light_blue)
+          puts ('#'*100).colorize(:light_blue)
           puts final_text
+          puts "\n\n"
         end
       else
-        puts "Producing helper spec file for: #{file_name}"
+        puts "Producing helper spec file for: #{file_name}".colorize(:green)
         f = File.open(file_name, 'wb+')
         f.write(final_text)
         f.close
@@ -398,7 +398,7 @@ module SpecProducer::SpecProductionModule
 
     nil
   rescue Exception => e
-    puts "Exception '#{e}' was raised. Skipping mailer specs production."
+    puts "Exception '#{e}' was raised. Skipping mailer specs production.".colorize(:red)
   end
 
   def self.produce_specs_for_jobs
@@ -442,14 +442,14 @@ module SpecProducer::SpecProductionModule
         if File.open(Rails.root.join(file_name)).read == final_text
           # nothing to do here, pre-existing content is the same :)
         else
-          puts '#'*100
-          puts "Please, check whether the following lines are included in: " + file_name + "\n"
-          puts '#'*100
-          puts "\n"
+          puts ('#'*100).colorize(:light_blue)
+          puts ("Please, check whether the following lines are included in: " + file_name).colorize(:light_blue)
+          puts ('#'*100).colorize(:light_blue)
           puts final_text
+          puts "\n\n"
         end
       else
-        puts "Producing job spec file for: #{file_name}"
+        puts "Producing job spec file for: #{file_name}".colorize(:green)
         f = File.open(file_name, 'wb+')
         f.write(final_text)
         f.close
@@ -458,7 +458,7 @@ module SpecProducer::SpecProductionModule
 
     nil
   rescue Exception => e
-    puts "Exception '#{e}' was raised. Skipping job specs production."
+    puts "Exception '#{e}' was raised. Skipping job specs production.".colorize(:red)
   end
 
   def self.produce_specs_for_serializers
@@ -495,22 +495,22 @@ module SpecProducer::SpecProductionModule
         if File.open(Rails.root.join("spec/serializers/#{descendant.name.underscore}_spec.rb")).read == final_text
           # nothing to do here, pre-existing content is the same :)
         else
-          puts '#'*100
-          puts "Please, check whether the following lines are included in: " + descendant.name.underscore + "_spec.rb\n"
-          puts '#'*100
-          puts "\n"
+          puts ('#'*100).colorize(:light_blue)
+          puts ("Please, check whether the following lines are included in: " + descendant.name.underscore + "_spec.rb").colorize(:light_blue)
+          puts ('#'*100).colorize(:light_blue)
           puts final_text
+          puts "\n\n"
         end
       else
         check_if_spec_folder_exists
 
         unless Dir.exists? Rails.root.join("spec/serializers")
-          puts "Generating spec/serializers directory"
+          puts "Generating spec/serializers directory".colorize(:yellow)
           Dir.mkdir(Rails.root.join("spec/serializers"))
         end
 
         path = "spec/serializers/#{descendant.name.underscore}_spec.rb"
-        puts "Producing serializer spec file for: #{path}"
+        puts "Producing serializer spec file for: #{path}".colorize(:green)
         f = File.open("#{Rails.root.join(path)}", 'wb+')
         f.write(final_text)
         f.close
@@ -519,7 +519,7 @@ module SpecProducer::SpecProductionModule
 
     nil
   rescue Exception => e
-    puts "Exception '#{e}' was raised. Skipping serializer specs production."
+    puts "Exception '#{e}' was raised. Skipping serializer specs production.".colorize(:red)
   end
 
   def self.produce_specs_for_controllers
@@ -564,14 +564,14 @@ module SpecProducer::SpecProductionModule
         if File.open(Rails.root.join(file_name)).read == final_text
           # nothing to do here, pre-existing content is the same :)
         else
-          puts '#'*100
-          puts "Please, check whether the following lines are included in: " + file_name + "\n"
-          puts '#'*100
-          puts "\n"
+          puts ('#'*100).colorize(:light_blue)
+          puts ("Please, check whether the following lines are included in: " + file_name).colorize(:light_blue)
+          puts ('#'*100).colorize(:light_blue)
           puts final_text
+          puts "\n\n"
         end
       else
-        puts "Producing controller spec file for: #{file_name}"
+        puts "Producing controller spec file for: #{file_name}".colorize(:green)
         f = File.open(file_name, 'wb+')
         f.write(final_text)
         f.close
@@ -580,7 +580,7 @@ module SpecProducer::SpecProductionModule
 
     nil
   rescue Exception => e
-    puts "Exception '#{e}' was raised. Skipping controller specs production."
+    puts "Exception '#{e}' was raised. Skipping controller specs production.".colorize(:red)
   end
 
   #######
@@ -626,14 +626,14 @@ module SpecProducer::SpecProductionModule
     if helper_strings_used.uniq.length == 1
       helper_strings_used.first
     else
-      puts "More than one helpers are in place in your specs! Proceeding with 'rails_helpers'."
+      puts "More than one helpers are in place in your specs! Proceeding with 'rails_helpers'.".colorize(:yellow)
       'rails_helper'
     end
   end
 
   def self.check_if_spec_folder_exists
      unless Dir.exists? Rails.root.join("spec")
-        puts "Generating spec directory"
+        puts "Generating spec directory".colorize(:yellow)
         Dir.mkdir(Rails.root.join("spec"))
       end
   end
