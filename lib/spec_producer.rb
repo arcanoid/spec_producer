@@ -112,6 +112,8 @@ module SpecProducer
     MissingFilesModule.print_missing_view_specs(options)
     MissingFilesModule.print_missing_mailer_specs(options)
     MissingFilesModule.print_missing_job_specs(options)
+    MissingFilesModule.print_missing_serializer_specs(options)
+    MissingFilesModule.print_missing_route_specs(options)
   end
 
   def self.print_missing_model_specs(options = {})
@@ -136,5 +138,13 @@ module SpecProducer
 
   def self.print_missing_job_specs(options = {})
     MissingFilesModule.print_missing_job_specs(options)
+  end
+
+  def self.print_missing_serializer_specs(options = {})
+    MissingFilesModule.print_missing_serializer_specs(options)
+  end
+
+  def self.print_missing_route_specs(options = {})
+    MissingFilesModule.print_missing_route_specs(options)
   end
 end
