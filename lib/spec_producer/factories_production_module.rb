@@ -41,24 +41,24 @@ module SpecProducer::FactoriesProductionModule
       final_text << "end"
 
       if File.exists?(Rails.root.join("spec/factories/#{descendant.name.underscore}.rb"))
-        puts '#'*100
-        puts "Please, check whether the following lines are included in: spec/factories/" + descendant.name.underscore + ".rb\n"
-        puts '#'*100
-        puts "\n"
+        puts ('#'*100).colorize(:light_blue)
+        puts ("Please, check whether the following lines are included in: spec/factories/" + descendant.name.underscore + ".rb").colorize(:light_blue)
+        puts ('#'*100).colorize(:light_blue)
         puts final_text
+        puts "\n\n"
       else
         unless Dir.exists? Rails.root.join("spec")
-          puts "Generating spec directory"
+          puts "Generating spec directory".colorize(:yellow)
           Dir.mkdir(Rails.root.join("spec"))
         end
 
         unless Dir.exists? Rails.root.join("spec/factories")
-          puts "Generating spec/factories directory"
+          puts "Generating spec/factories directory".colorize(:yellow)
           Dir.mkdir(Rails.root.join("spec/factories"))
         end
 
         path = "spec/factories/#{descendant.name.underscore}.rb"
-        puts "Producing factory file for: #{path}"
+        puts "Producing factory file for: #{path}".colorize(:green)
         f = File.open("#{Rails.root.join(path)}", 'wb+')
         f.write(final_text)
         f.close
@@ -67,8 +67,8 @@ module SpecProducer::FactoriesProductionModule
 
     nil
   rescue NameError => e
-    puts "NameError '#{e}' was raised. Can't produce factories for this project."
+    puts "NameError '#{e}' was raised. Can't produce factories for this project.".colorize(:red)
   rescue Exception => e
-    puts "Exception '#{e}' was raised. Skipping factories production."
+    puts "Exception '#{e}' was raised. Skipping factories production.".colorize(:red)
   end
 end

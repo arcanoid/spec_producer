@@ -48,6 +48,8 @@ module SpecProducer
   end
 
   def self.set_up_necessities
+    # TODO: Update spec_helper or rails helper with proper configurations
+    # TODO: Execute rspec initiate if that hasn't be run so far
     gemfiles = Dir.glob(Rails.root.join('Gemfile'))
 
     if gemfiles.size > 0
@@ -94,10 +96,10 @@ module SpecProducer
       f.write(contents)
       f.close
 
-      puts actions_needed
-      puts useful_info
+      puts actions_needed.colorize(:green)
+      puts useful_info.colorize(:light_blue)
     else
-      puts "We couldn't find a Gemfile and setting up halted!"
+      puts "We couldn't find a Gemfile and setting up halted!".colorize(:red)
     end
   end
 
