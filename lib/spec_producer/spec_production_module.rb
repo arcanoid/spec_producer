@@ -247,26 +247,26 @@ module SpecProducer::SpecProductionModule
       final_text << "  describe 'content' do\n"
 
       fields_in_file.each do |field_name|
-        final_text << "    it { should have_field '#{ field_name }' }\n"
+        final_text << "    it { is_expected.to have_field '#{ field_name }' }\n"
       end  
 
       submit_tags_in_file.each do |field_name|
-        final_text << "    it { should have_css \"input[type='submit'][value=#{ field_name }]\" }\n"
+        final_text << "    it { is_expected.to have_css \"input[type='submit'][value=#{ field_name }]\" }\n"
       end  
 
       templates_in_file.each do |template_name|
         template_path_elements = template_name.split('/')
         template_path_elements.last.gsub!(/^/, '_')
 
-        final_text << "    it { should render_template '#{ template_path_elements.join('/') }' }\n"
+        final_text << "    it { is_expected.to render_template '#{ template_path_elements.join('/') }' }\n"
       end
 
       partials_in_file.each do |partial_name|
-        final_text << "    it { should render_template(:partial => '#{ partial_name }') }\n"
+        final_text << "    it { is_expected.to render_template(:partial => '#{ partial_name }') }\n"
       end
 
       links_in_file.each do |link|
-        final_text << "    it { should have_link '#{link[1]}', :href => '#{link[0]}' }\n"
+        final_text << "    it { is_expected.to have_link '#{link[1]}', :href => '#{link[0]}' }\n"
       end
 
       conditions_in_file.each do |condition|
