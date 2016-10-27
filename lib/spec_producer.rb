@@ -14,38 +14,56 @@ module SpecProducer
     SpecProductionModule.produce_specs_for_mailers
     SpecProductionModule.produce_specs_for_jobs
     SpecProductionModule.produce_specs_for_serializers
+
+    run_spec_tests
   end
 
   def self.produce_specs_for_models
     SpecProductionModule.produce_specs_for_models
+
+    run_spec_tests
   end
 
   def self.produce_specs_for_routes
     SpecProductionModule.produce_specs_for_routes
+
+    run_spec_tests
   end
 
   def self.produce_specs_for_views
     SpecProductionModule.produce_specs_for_views
+
+    run_spec_tests
   end
 
   def self.produce_specs_for_controllers
     SpecProductionModule.produce_specs_for_controllers
+
+    run_spec_tests
   end
 
   def self.produce_specs_for_helpers
     SpecProductionModule.produce_specs_for_helpers
+
+    run_spec_tests
   end
 
   def self.produce_specs_for_mailers
     SpecProductionModule.produce_specs_for_mailers
+
+    run_spec_tests
   end
 
   def self.produce_specs_for_jobs
     SpecProductionModule.produce_specs_for_jobs
+
+    run_spec_tests
   end
 
   def self.produce_specs_for_serializers
     SpecProductionModule.produce_specs_for_serializers
+
+    run_spec_tests
   end
 
   def self.set_up_necessities
@@ -97,5 +115,11 @@ module SpecProducer
 
   def self.print_missing_route_specs(options = {})
     MissingFilesModule.print_missing_route_specs(options)
+  end
+
+  def self.run_spec_tests
+    puts "\nRunning all current spec tests...\n"
+
+    system 'bundle exec rake'
   end
 end
