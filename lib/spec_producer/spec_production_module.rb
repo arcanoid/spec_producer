@@ -375,7 +375,17 @@ module SpecProducer::SpecProductionModule
       file_name = "#{file.gsub('app/', 'spec/').gsub('.rb', '')}_spec.rb"
       final_text = "require '#{require_helper_string}'\n\n"
       final_text << "describe #{File.basename(file, ".rb").camelcase}, :type => :mailer do\n"
-      final_text << "  pending 'mailer tests'\n"
+      final_text << "  pending 'mailer tests' do\n"
+      final_text << "    let(:mail) { #{File.basename(file, ".rb").camelcase}.action }\n"
+      final_text << "    it 'renders the headers' do\n"
+      final_text << "      expect(mail.subject).to eq('subject')\n"
+      final_text << "      expect(mail.to).to eq('receiver@example.com')\n"
+      final_text << "      expect(mail.from).to eq('sender@example.com')\n"
+      final_text << "    end\n\n"
+      final_text << "    it 'renders the body' do\n"
+      final_text << "      expect(mail.body.encoded).to match('The body!')\n"
+      final_text << "    end\n"
+      final_text << "  end\n"
       final_text << "end"
 
       check_if_spec_folder_exists
