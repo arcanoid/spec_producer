@@ -1,3 +1,5 @@
+require 'colorize'
+
 module SpecProducer::SpecProductionModule
   def self.produce_specs_for_models
     Dir.glob(Rails.root.join('app/models/*.rb')).each do |x|
