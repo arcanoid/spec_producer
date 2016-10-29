@@ -5,7 +5,7 @@ module SpecProducer::SpecProductionModule
     Dir.glob(Rails.root.join('app/models/*.rb')).each do |x|
       require x
     end
-    
+
     not_valid_descendants = [ ActiveRecord::SchemaMigration ]
 
     if Object.const_defined?('Delayed')
@@ -230,12 +230,12 @@ module SpecProducer::SpecProductionModule
       file_name = "#{file.gsub('app/', 'spec/')}_spec.rb"
       final_text = "require '#{require_helper_string}'\n\n"
       final_text << "describe '#{file.gsub('app/views/', '')}', :type => :view do\n"
-      final_text << "  let(:page) { Capybara::Node::Simple.new(rendered) }\n\n"
+      final_text << "  let(:page) { Capybara::Node::Simple.new(rendered) }\n"
 
       objects_in_file.each do |object|
-        final_text << "  let(:#{object}) { '#{object}' }\n"
+        final_text << "\n  let(:#{object}) { '#{object}' }"
       end
-      
+
       final_text << "\n  subject { page }\n\n"
       final_text << "  before do\n"
 
@@ -250,11 +250,11 @@ module SpecProducer::SpecProductionModule
 
       fields_in_file.each do |field_name|
         final_text << "    it { is_expected.to have_field '#{ field_name }' }\n"
-      end  
+      end
 
       submit_tags_in_file.each do |field_name|
         final_text << "    it { is_expected.to have_css \"input[type='submit'][value=#{ field_name }]\" }\n"
-      end  
+      end
 
       templates_in_file.each do |template_name|
         template_path_elements = template_name.split('/')
@@ -498,7 +498,7 @@ module SpecProducer::SpecProductionModule
       descendant._attributes.map do |x|
         final_text << "        expect(subject['#{x}']).to eq('')\n"
       end
-      
+
       final_text << "    end\n"
       final_text << "  end\n"
       final_text << "end"
@@ -644,10 +644,10 @@ module SpecProducer::SpecProductionModule
   end
 
   def self.check_if_spec_folder_exists
-     unless Dir.exists? Rails.root.join("spec")
-        puts "Generating spec directory".colorize(:yellow)
-        Dir.mkdir(Rails.root.join("spec"))
-      end
+    unless Dir.exists? Rails.root.join("spec")
+      puts "Generating spec directory".colorize(:yellow)
+      Dir.mkdir(Rails.root.join("spec"))
+    end
   end
 
   private_class_method :produce_association_options

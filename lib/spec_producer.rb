@@ -67,7 +67,7 @@ module SpecProducer
   end
 
   def self.set_up_necessities
-   MissingGemsModule.set_up_necessities
+    MissingGemsModule.set_up_necessities
   end
 
   def self.produce_factories
@@ -133,7 +133,7 @@ module SpecProducer
                   when 'models' then 'bundle exec rspec spec/models'
                   else 'bundle exec rspec'
                 end
-      
+
       system command
     end
   end

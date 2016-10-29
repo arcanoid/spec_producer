@@ -15,7 +15,7 @@ module SpecProducer::MissingFilesModule
       puts "Missing model spec file for: #{file}".colorize(:red)
     end
 
-    if missing.size == 0 
+    if missing.size == 0
       puts "No missing model spec files found!".colorize(:green)
     end
   end
@@ -34,7 +34,7 @@ module SpecProducer::MissingFilesModule
       puts "Missing controller spec file for: #{file}".colorize(:red)
     end
 
-    if missing.size == 0 
+    if missing.size == 0
       puts "No missing controller spec files found!".colorize(:green)
     end
   end
@@ -53,7 +53,7 @@ module SpecProducer::MissingFilesModule
       puts "Missing job spec file for: #{file}".colorize(:red)
     end
 
-    if missing.size == 0 
+    if missing.size == 0
       puts "No missing job spec files found!".colorize(:green)
     end
   end
@@ -72,28 +72,28 @@ module SpecProducer::MissingFilesModule
       puts "Missing mailer spec file for: #{file}".colorize(:red)
     end
 
-    if missing.size == 0 
+    if missing.size == 0
       puts "No missing mailer spec files found!".colorize(:green)
     end
   end
 
   def self.print_missing_helper_specs(options = {})(options = {})
-    if options[:specific_namespace]
-      files_list = Dir["app/helpers/**/#{options[:specific_namespace].gsub('app/helpers', '')}/**/*.rb"]
-    else
-      files_list = Dir["app/helpers/**/*.rb"]
-    end
+  if options[:specific_namespace]
+    files_list = Dir["app/helpers/**/#{options[:specific_namespace].gsub('app/helpers', '')}/**/*.rb"]
+  else
+    files_list = Dir["app/helpers/**/*.rb"]
+  end
 
-    puts "\n" << "## Searching for missing helper specs...".colorize(:light_blue)
-    missing = files_list.select { |file| !FileTest.exists?(file.gsub('app/', 'spec/').gsub('.rb', '_spec.rb')) }
+  puts "\n" << "## Searching for missing helper specs...".colorize(:light_blue)
+  missing = files_list.select { |file| !FileTest.exists?(file.gsub('app/', 'spec/').gsub('.rb', '_spec.rb')) }
 
-    missing.each do |file|
-      puts "Missing helper spec file for: #{file}".colorize(:red)
-    end
+  missing.each do |file|
+    puts "Missing helper spec file for: #{file}".colorize(:red)
+  end
 
-    if missing.size == 0 
-      puts "No missing helper spec files found!".colorize(:green)
-    end
+  if missing.size == 0
+    puts "No missing helper spec files found!".colorize(:green)
+  end
   end
 
   def self.print_missing_view_specs(options = {})
@@ -110,7 +110,7 @@ module SpecProducer::MissingFilesModule
       puts "Missing view spec file for: #{file}".colorize(:red)
     end
 
-    if missing.size == 0 
+    if missing.size == 0
       puts "No missing view spec files found!".colorize(:green)
     end
   end
@@ -129,7 +129,7 @@ module SpecProducer::MissingFilesModule
       puts "Missing serializer spec file for: #{file}".colorize(:red)
     end
 
-    if missing.size == 0 
+    if missing.size == 0
       puts "No missing serializer spec files found!".colorize(:green)
     end
   end
@@ -155,11 +155,11 @@ module SpecProducer::MissingFilesModule
       end
     end
 
-     missing.each do |file|
+    missing.each do |file|
       puts "Missing route spec file for: #{file}".colorize(:red)
     end
 
-    if missing.size == 0 
+    if missing.size == 0
       puts "No missing route spec files found!".colorize(:green)
     end
   end

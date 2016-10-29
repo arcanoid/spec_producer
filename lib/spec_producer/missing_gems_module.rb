@@ -14,7 +14,7 @@ module SpecProducer::MissingGemsModule
       missing_gems << 'factory_girl_rails' unless (gems.include? 'factory_girl_rails')
       missing_gems << 'shoulda-matchers' unless (gems.include? 'shoulda-matchers')
       missing_gems << 'webmock' unless (gems.include? 'webmock')
-      missing_gems << 'rubocop' unless (gems.include? 'rubocop')  
+      missing_gems << 'rubocop' unless (gems.include? 'rubocop')
 
       # No need for capybara if there are no views to parse
       missing_gems << 'capybara' unless ((gems.include? 'capybara') && Dir["app/views/**/*.erb"] != [])
@@ -43,31 +43,33 @@ module SpecProducer::MissingGemsModule
 
         contents << "end"
 
-      	f = File.open(gemfiles.first, 'wb+')
-      	f.write(contents)
-      	f.close
+        f = File.open(gemfiles.first, 'wb+')
+        f.write(contents)
+        f.close
 
-		if defined?(Bundler)
-			Bundler.with_clean_env do
-				puts "\n\nRunning bundle after setting list of gems in you Gemfile.".colorize(:yellow)
+        if defined?(Bundler)
+          Bundler.with_clean_env do
+            puts "\n\nRunning bundle after setting list of gems in you Gemfile.".colorize(:yellow)
 
-      			system 'bundle install'
-      		end
-      	end
+            system 'bundle install'
+          end
+        end
 
-      	if 'rspec-rails'.in? missing_gems
-			puts "\n\nInitializing Rspec files and helpers.".colorize(:yellow)
+        if 'rspec-rails'.in? missing_gems
+          puts "\n\nInitializing Rspec files and helpers.".colorize(:yellow)
 
-      	    system 'rails generate rspec:install'
-      	end
+          system 'rails generate rspec:install'
+        end
+
+        if actions_needed != ''
+          puts "\n\nYou will additionally need to:\n".colorize(:green)
+          puts actions_needed.colorize(:green)
+        end
+
+        puts useful_info.colorize(:light_blue)
+      else
+        puts 'Could not find anything missing!'.colorize(:light_blue)
       end
-
-      if actions_needed != ''
-      	puts "\n\nYou will additionally need to:\n".colorize(:green)
-      	puts actions_needed.colorize(:green)
-      end
-
-      puts useful_info.colorize(:light_blue)
     else
       puts "We couldn't find a Gemfile and setting up halted!".colorize(:red)
     end

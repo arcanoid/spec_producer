@@ -30,10 +30,10 @@ module SpecProducer::FactoriesProductionModule
 
         final_text << "    #{column.name} #{value}\n"
       end
-             
+
       descendant.reflections.each_pair do |key, reflection|
         if reflection.macro == :has_one
-          final_text << "    association :#{key.to_s}\n"  
+          final_text << "    association :#{key.to_s}\n"
         end
       end
 
