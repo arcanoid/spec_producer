@@ -1,3 +1,12 @@
+## 0.12.0 (2016-11-8)
+
+Features:
+* Cover more characteristics through static analysis
+* Update serializer specs
+* Colorized responses
+* Run specs after production
+* Initial attempt for command line runs
+
 ## 0.11.0 (2016-10-18)
 
 Features:
