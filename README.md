@@ -11,7 +11,9 @@ functionality. It reads through the files of the project and prepares some of th
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'spec_producer'
+group :development, :test do
+  gem 'spec_producer'
+end
 ```
 
 And then execute:
