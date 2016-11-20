@@ -1,8 +1,0 @@
-#!/usr/bin/env ruby
-require 'spec_producer'
-
-case ARGV[0]
-	when 'controllers' then SpecProducer.produce_specs_for_controllers
-	when 'routes' then SpecProducer.produce_specs_for_routes
-	else puts 'Unsupported type given'
-end	
