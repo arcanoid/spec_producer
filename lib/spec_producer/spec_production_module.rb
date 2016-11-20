@@ -6,7 +6,7 @@ module SpecProducer::SpecProductionModule
       require x
     end
 
-    not_valid_descendants = [ ActiveRecord::SchemaMigration ]
+    not_valid_descendants = [ ActiveRecord::SchemaMigration, ApplicationRecord ]
 
     if Object.const_defined?('Delayed')
       not_valid_descendants << Delayed::Backend::ActiveRecord::Job
@@ -68,7 +68,7 @@ module SpecProducer::SpecProductionModule
         final_text << "  it { is_expected.to have_db_column :#{column_name} }\n"
       end
 
-      final_text << "  describe 'valid?'\n"
+      final_text << "  describe 'valid?' do\n"
       final_text << "    subject { FactoryGirl.build(:#{descendant.name.underscore}).valid? }\n\n"
       final_text << "    it { is_expected.to eq(true) }\n"
       final_text << "  end\n\n"
@@ -490,7 +490,7 @@ module SpecProducer::SpecProductionModule
       final_text << "      expect(subject.attributes.keys).to contain_exactly(#{descendant._attributes.map { |x| ":#{x.to_s}" }.join(', ')})\n"
       final_text << "    end\n\n"
 
-      final_text << "    describe 'to_json'\n"
+      final_text << "    describe 'to_json' do\n"
       final_text << "      subject { JSON.parse(#{descendant.name}.new(FactoryGirl.build(:#{descendant.name.underscore.gsub('_serializer', '')})).to_json) }\n\n"
 
       final_text << "      it 'has the proper values' do\n"
