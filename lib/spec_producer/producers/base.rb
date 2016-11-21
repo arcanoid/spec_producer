@@ -60,8 +60,6 @@ module SpecProducer
       def initialize(type)
         # TODO: this is the correct place to load Rails
         # see also spec_helper hacks on rails
-        Rails.application.eager_load!
-
         @type = type
         @spec_text = SpecProducer::RspecText::Base.new
       end

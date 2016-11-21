@@ -1,4 +1,7 @@
 require "spec_producer/version"
+
+require 'spec_producer/railtie'
+
 require "spec_producer/missing_files_module"
 require "spec_producer/missing_gems_module"
 require "spec_producer/spec_production_module"
@@ -233,5 +236,3 @@ module SpecProducer
     end
   end
 end
-
-#require 'rails/all'

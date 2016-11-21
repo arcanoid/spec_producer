@@ -26,7 +26,7 @@ Or install it yourself as:
 
 ## Usage
 
-Currently this gem supports the production of spec tests for activemodel Models and routing specs. 
+Currently this gem supports the production of spec tests for activemodel Models and routing specs.
 If the spec file already exists then it prints what could be its contents.
 
 To produce all possible tests, run:
