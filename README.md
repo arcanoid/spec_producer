@@ -3,15 +3,15 @@
 [![Build Status](https://travis-ci.org/arcanoid/spec_producer.svg?branch=master)](https://travis-ci.org/arcanoid/spec_producer)
 [![Gem Version](https://badge.fury.io/rb/spec_producer.svg)](https://badge.fury.io/rb/spec_producer)
 
-SpecProducer is a gem that is meant to assist users in skipping the tedious work of creating spec tests for basic 
-functionality. It reads through the files of the project and prepares some of the basic spec tests for you. 
+SpecProducer is a library that is meant to assist users in skipping the tedious work of creating spec tests for basic
+Rails applications. It reads through Active Record subclasses of the project and prepares some of the basic spec tests for you.
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
 ```ruby
-group :development, :test do
+group :development do
   gem 'spec_producer'
 end
 ```
@@ -26,16 +26,22 @@ Or install it yourself as:
 
 ## Usage
 
-Currently this gem supports the production of spec tests for activemodel Models and routing specs.
-If the spec file already exists then it prints what could be its contents.
+Currently this gem supports the production of spec tests for active record models.
+If the spec file already exists then it prints out the contents it would generated
+for a model.
 
-To produce all possible tests, run:
+To produce all possible tests you can run the public API methods directly from a Rails console
+or use the rake tasks provided by the gem (run rake -T | grep spec_producer for all available rake tasks)
+on  a rails project.
 
 ```ruby
-SpecProducer.produce_specs_for_all_types
-```
+  # Using a rake task (currently supports producing only model specs)
+  bundle exec rake spec_producer:all
 
-To produce all tests for models, run:
+  #or produce all tests for models:
+
+  bundle exec rake spec_producer:models
+```
 
 ```ruby
 SpecProducer.produce_specs_for_models
@@ -99,10 +105,7 @@ SpecProducer.print_missing_view_specs
 ```
 
 ## Development
-
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
-
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests.
 
 ## Contributing
 
