@@ -1,10 +1,108 @@
 require "spec_producer/version"
+
+require 'spec_producer/railtie'
+
 require "spec_producer/missing_files_module"
 require "spec_producer/missing_gems_module"
 require "spec_producer/spec_production_module"
 require "spec_producer/factories_production_module"
 
+require 'active_support/core_ext/module/delegation'
+
+require 'spec_producer/producers/base'
+require 'spec_producer/producers/registry'
+require 'spec_producer/producers/models_spec_producer'
+
+require 'spec_producer/rspec_text'
+
+require 'spec_producer/spec_runner'
+
+require 'configuration'
+
 module SpecProducer
+  extend Configuration
+  # == Spec \Producer
+  # Produces specs for the given type(s)
+  #
+  # To produce all spec you simply run:
+  #   SpecProducer.produce
+  #
+  # You can provide some options to tell the producer to include or exclude some specs
+  # Example with <tt>:include</tt> option
+  #
+  #   SpecProducer.produce(only: [:models, :controllers])
+  #
+  # Example with <tt>exclude</tt> option
+  #   SpecProducer.produce(except: :views)
+  #
+  #
+  # We can produce specs for a single type by calling 
+  #
+  #   SpecProducer.produce_spec(:models)
+  #
+  # 
+  # To add a new type of a Producer (Concrete class under spec_producer/producers) for a given type
+  # we need to register it in this class here first. For example if we want to implement ControllersSpecProducer
+  # we would register it as follows:
+  #   
+  #   register(:models, Producers::ModelsSpecProducer)
+  #
+  # This gives as the convention to lookup producers using a symbol and later on we can add
+  # extra functionality when registering a producer (optional params, init with lambdas etc.)
+  #
+
+  @registry = Producers::Registry.new
+
+  class << self
+    attr_reader :registry
+    delegate :run, to: SpecRunner
+
+    def produce(*args)
+      opts = args.extract_options!
+      spec_types = registry.types
+
+      if only = opts[:only]
+        spec_types &= Array(only).map(&:to_sym)
+      elsif except = opts[:except]
+        spec_types -= Array(except).map(&:to_sym)
+      end
+
+      # Produce the specs
+      spec_types.each { |t| produce_spec(t) }
+
+      # Run the specs
+      run(spec_types) if opts[:run_specs]
+    end
+
+    def register(type_name, klass)
+      registry.register(type_name, klass)
+    end
+
+    # Produces a since spec type. For example
+    #
+    #   SpecProducer.produce_spec(:models)
+    #
+    # Will fetch and execute the Producers::ModelsSpecProducer
+    #
+    def produce_spec(spec_type)
+      lookup!(spec_type)
+    end
+
+    # Fetches the producer from the registry. Note: that the #lookup method
+    # on registry instantiates and executes the producer to start generating
+    # the spec files. This execution is hidden in repository and the client 
+    # is not aware of what is going on underneath. TODO: Refactor this so
+    # registry#lookup! does not executes the regitered Producer.
+    #
+    # If no Producer is Found an ArgumentError exception is thown.
+    #
+    def lookup!(spec_type)
+      registry.lookup!(spec_type)
+    end
+  end
+
+  register(:models, Producers::ModelsSpecProducer)
+
   def self.produce_specs_for_all_types
     SpecProductionModule.produce_specs_for_models
     SpecProductionModule.produce_specs_for_routes
