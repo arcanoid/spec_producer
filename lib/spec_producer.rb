@@ -9,12 +9,8 @@ require "spec_producer/factories_production_module"
 
 require 'active_support/core_ext/module/delegation'
 
-require 'spec_producer/producers/base'
-require 'spec_producer/producers/registry'
-require 'spec_producer/producers/models_spec_producer'
-
-require 'spec_producer/rspec_text'
-
+require 'spec_producer/producers'
+require 'spec_producer/rspec_builders'
 require 'spec_producer/spec_runner'
 
 require 'configuration'
@@ -42,10 +38,10 @@ module SpecProducer
   #
   # 
   # To add a new type of a Producer (Concrete class under spec_producer/producers) for a given type
-  # we need to register it in this class here first. For example if we want to implement ControllersSpecProducer
+  # we need to register it in this class. For example if we want to implement ControllersProducer
   # we would register it as follows:
-  #   
-  #   register(:models, Producers::ModelsSpecProducer)
+  #
+  #   register(:models, Producers::ControllersProducer)
   #
   # This gives as the convention to lookup producers using a symbol and later on we can add
   # extra functionality when registering a producer (optional params, init with lambdas etc.)
@@ -78,7 +74,7 @@ module SpecProducer
       registry.register(type_name, klass)
     end
 
-    # Produces a since spec type. For example
+    # Produces a single spec type. For example
     #
     #   SpecProducer.produce_spec(:models)
     #
@@ -101,7 +97,8 @@ module SpecProducer
     end
   end
 
-  register(:models, Producers::ModelsSpecProducer)
+  # Register new producers
+  register(:models, Producers::ModelsProducer)
 
   def self.produce_specs_for_all_types
     SpecProductionModule.produce_specs_for_models

@@ -13,12 +13,12 @@ module SpecProducer
       end
 
       context 'registering a producer' do
-        before { subject.register(:models, Producers::ModelsSpecProducer) }
+        before { subject.register(:models, Producers::ModelsProducer) }
         it { expect(subject.size).to eq 1 }
         it { expect(subject).to_not be_empty }
         it { expect(subject.types).to eq [:models] }
         it { expect(subject.registered?(:models)).to be true }
-        it { expect(subject.lookup!(:models)).to be_a Producers::ModelsSpecProducer }
+        it { expect(subject.lookup!(:models)).to be_a Producers::ModelsProducer }
       end
       context 'when a producer type cannot be fetched' do
         it { expect{subject.lookup!(:non_existing)}.to raise_error(ArgumentError) }
