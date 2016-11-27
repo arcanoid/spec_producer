@@ -91,7 +91,7 @@ describe SpecProducer do
   describe '.lookup!' do
     it 'returns a registered spec producer' do
       model_producer = subject.lookup!(:models)
-      expect(model_producer).to be_a SpecProducer::Producers::ModelsSpecProducer
+      expect(model_producer).to be_a SpecProducer::Producers::ModelsProducer
       expect(model_producer.type).to eq :models
     end
     it 'returns all registered spec producers'
