@@ -1,4 +1,5 @@
 require 'active_record'
+
 module SpecProducer
   module Producers
     class ModelsProducer
@@ -12,7 +13,7 @@ module SpecProducer
       def resources
         ActiveRecord::Base.descendants.reject do |descendant|
           should_ignore?(descendant)
-        end.map { |desc| Resource.new(desc, desc.name, 'model')  }
+        end.map { |desc| Resource.new(desc, desc.name, 'model') }
       end
 
       def call(resource)
@@ -52,7 +53,9 @@ module SpecProducer
         end
       end
 
+      #######
       private
+      #######
 
       def respond_to_specs(attrs = [])
         return enum_for(:attrs) unless block_given?
