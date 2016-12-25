@@ -99,6 +99,13 @@ module SpecProducer
 
   # Register new producers
   register(:models, Producers::ModelsProducer)
+  register(:views, Producers::ViewsProducer)
+  register(:controllers, Producers::ControllersProducer)
+  register(:helpers, Producers::HelpersProducer)
+  register(:routes, Producers::RoutesProducer)
+  register(:mailers, Producers::MailersProducer)
+  register(:jobs, Producers::JobsProducer)
+  register(:serializers, Producers::SerializersProducer)
 
   def self.produce_specs_for_all_types
     SpecProductionModule.produce_specs_for_models
