@@ -37,17 +37,37 @@ describe SpecProducer do
 
     context 'only option' do
       before { expect(subject.registry.registered?(:models)).to be true }
+     
       it 'produces only the specs provided' do
         expect(subject).to receive(:produce_spec).with(:models)
+        expect(subject).to receive(:produce_spec).with(:controllers)
 
         # Fire
         SpecProducer.produce(only: [:models, :controllers])
       end
+
+      it 'ignores unknown types and produces only the specs provided' do
+        expect(subject).to receive(:produce_spec).with(:models)
+
+        # Fire
+        SpecProducer.produce(only: [:models, :unknown])
+      end
     end
+
     context 'except option' do
-      it 'produces all the secs except the given ones' do
+      it 'produces all the specs except the given ones' do
         all_types = SpecProducer.registry.types
         except = [:controllers, :models, :views]
+        remaining = all_types -= except
+        remaining.each {|type|
+          expect(subject).to receive(:produce_spec).with(type)
+        }
+        SpecProducer.produce(except: except)
+      end
+
+      it 'ignores unknown types and produces all the specs except the given ones' do
+        all_types = SpecProducer.registry.types
+        except = [:unknown]
         remaining = all_types -= except
         remaining.each {|type|
           expect(subject).to receive(:produce_spec).with(type)
@@ -68,7 +88,7 @@ describe SpecProducer do
   it { expect(subject.registry).to be_a SpecProducer::Producers::Registry }
 
   it 'should have registered all producers' do
-    expect(subject.registry.registrations.size).to eq 1
+    expect(subject.registry.registrations.size).to eq 8
   end
 
   describe '.register' do
