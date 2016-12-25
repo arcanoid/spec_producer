@@ -110,7 +110,7 @@ module SpecProducer
       end
 
       def helper_spec_file
-        "require \"#{require_helper_string}\""
+        "require \'#{require_helper_string}\'\n"
       end
 
       def rspec_describe(klass, type)
