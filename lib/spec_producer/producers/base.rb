@@ -88,7 +88,7 @@ module SpecProducer
           end
 
           # Footer / Fils Close etc
-          Utils::FileUtils.try_to_create_spec_file('models', resource.name.underscore, builder)
+          Utils::FileUtils.try_to_create_spec_file(resource.type.pluralize, resource.name.underscore, builder)
           builder.flush!
         end
 
