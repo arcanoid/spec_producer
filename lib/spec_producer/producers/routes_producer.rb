@@ -1,5 +1,3 @@
-require 'active_record'
-
 module SpecProducer
   module Producers
     class RoutesProducer
