@@ -25,6 +25,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "sqlite3"
   spec.add_development_dependency "factory_girl"
   spec.add_development_dependency "shoulda-matchers"
+  spec.add_runtime_dependency "active_model_serializers"
   spec.add_runtime_dependency "colorize"
   spec.add_runtime_dependency "rails"
 end
