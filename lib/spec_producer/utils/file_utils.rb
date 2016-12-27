@@ -33,7 +33,6 @@ module SpecProducer
         end
       end
 
-
       def collect_helper_strings
         spec_files = Dir.glob(Rails.root.join('spec/**/*_spec.rb'))
         helper_strings_used = []
