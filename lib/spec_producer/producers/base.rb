@@ -103,7 +103,10 @@ module SpecProducer
         super
       end
 
+      #######
       private
+      #######
+
       def handle_exception(e)
         raise e if SpecProducer.configuration.raise_errors
         puts "Exception '#{e}' was raised. Skipping model specs production.".colorize(:red)

@@ -29,7 +29,10 @@ module SpecProducer
         Hash[ * CONFIG_ATTRS.map { |key| [key, send(key)] }]
       end
 
+      #######
       private
+      #######
+      
       def set_default_values
         self.raise_errors = true
       end
