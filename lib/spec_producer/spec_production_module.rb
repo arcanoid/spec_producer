@@ -480,26 +480,6 @@ module SpecProducer::SpecProductionModule
   private
   #######
 
-  def self.produce_association_options(reflection)
-    return if reflection.options.empty?
-
-    final_text = []
-
-    reflection.options.each_pair do |key, value|
-      final_text << case key
-                      when :inverse_of then "inverse_of(:#{value})"
-                      when :autosave then "autosave(#{value})"
-                      when :through then "through(:#{value})"
-                      when :class_name then "class_name('#{value}')"
-                      when :foreign_key then "with_foreign_key('#{value}')"
-                      when :primary_key then "with_primary_key('#{value}')"
-                      when :source then "source(:#{value})"
-                      when :dependent then "dependent(:#{value})"
-                    end
-    end
-    final_text.reject(&:nil?).join('.').prepend('.')
-  end
-
   def self.require_helper_string
     @require_helper_string ||= collect_helper_strings
   end
@@ -531,7 +511,6 @@ module SpecProducer::SpecProductionModule
     end
   end
 
-  private_class_method :produce_association_options
   private_class_method :require_helper_string
   private_class_method :collect_helper_strings
   private_class_method :check_if_spec_folder_exists

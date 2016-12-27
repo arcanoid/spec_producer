@@ -108,7 +108,6 @@ module SpecProducer
   register(:serializers, Producers::SerializersProducer)
 
   def self.produce_specs_for_all_types
-    SpecProductionModule.produce_specs_for_models
     SpecProductionModule.produce_specs_for_routes
     SpecProductionModule.produce_specs_for_views
     SpecProductionModule.produce_specs_for_controllers
@@ -118,12 +117,6 @@ module SpecProducer
     SpecProductionModule.produce_specs_for_serializers
 
     run_spec_tests
-  end
-
-  def self.produce_specs_for_models
-    SpecProductionModule.produce_specs_for_models
-
-    run_spec_tests 'models'
   end
 
   def self.produce_specs_for_routes
