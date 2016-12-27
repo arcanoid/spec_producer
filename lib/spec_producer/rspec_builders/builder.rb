@@ -85,6 +85,23 @@ module SpecProducer
         new_line
       end
 
+      # Adds a pending 'some' block to buffer
+      # it also adds a new line for the next spec to be added to the new line
+      #
+      # Example
+      #   
+      #   RspecBuilders::Based.build do |b|
+      #     b.pending { 'some missing spec' }
+      #   end
+      #
+      #   Produces:
+      #     pending 'some missing spec'
+      #
+      def pending(s)
+        add "pending '#{s}'"
+        new_line
+      end
+
       # Adds a context or describe (alias) block for the spec.
       # the method is responsible to handle the intentation management 
       # (increase / decrease). 
