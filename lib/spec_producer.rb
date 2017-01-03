@@ -114,7 +114,6 @@ module SpecProducer
     SpecProductionModule.produce_specs_for_helpers
     SpecProductionModule.produce_specs_for_mailers
     SpecProductionModule.produce_specs_for_jobs
-    SpecProductionModule.produce_specs_for_serializers
 
     run_spec_tests
   end
@@ -153,12 +152,6 @@ module SpecProducer
     SpecProductionModule.produce_specs_for_jobs
 
     run_spec_tests 'jobs'
-  end
-
-  def self.produce_specs_for_serializers
-    SpecProductionModule.produce_specs_for_serializers
-
-    run_spec_tests 'serializers'
   end
 
   def self.set_up_necessities

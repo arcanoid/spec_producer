@@ -354,67 +354,6 @@ module SpecProducer::SpecProductionModule
     puts "Exception '#{e}' was raised. Skipping job specs production.".colorize(:red)
   end
 
-  def self.produce_specs_for_serializers
-    Dir.glob(Rails.root.join('app/serializers/*.rb')).each do |x|
-      require x
-    end
-
-    not_valid_descendants = [ ActiveModel::Serializer::ErrorSerializer ]
-
-    ActiveModel::Serializer.descendants.reject { |descendant| not_valid_descendants.include? descendant }.each do |descendant|
-      final_text = "require '#{require_helper_string}'\n\n"
-      final_text << "describe #{descendant.name}, :type => :serializer do\n"
-
-      final_text << "  describe 'serializer tests' do\n"
-      final_text << "    subject { #{descendant.name}.new(FactoryGirl.build(:#{descendant.name.underscore.gsub('_serializer', '')})) }\n\n"
-      final_text << "    it 'includes the expected attribute keys' do\n"
-      final_text << "      expect(subject.attributes.keys).to contain_exactly(#{descendant._attributes.map { |x| ":#{x.to_s}" }.join(', ')})\n"
-      final_text << "    end\n\n"
-
-      final_text << "    describe 'to_json' do\n"
-      final_text << "      subject { JSON.parse(#{descendant.name}.new(FactoryGirl.build(:#{descendant.name.underscore.gsub('_serializer', '')})).to_json) }\n\n"
-
-      final_text << "      it 'has the proper values' do\n"
-
-      descendant._attributes.map do |x|
-        final_text << "        expect(subject['#{x}']).to eq('')\n"
-      end
-
-      final_text << "    end\n"
-      final_text << "  end\n"
-      final_text << "end"
-
-      if File.exists?(Rails.root.join("spec/serializers/#{descendant.name.underscore}_spec.rb"))
-        if File.open(Rails.root.join("spec/serializers/#{descendant.name.underscore}_spec.rb")).read == final_text
-          # nothing to do here, pre-existing content is the same :)
-        else
-          puts ('#'*100).colorize(:light_blue)
-          puts ("Please, check whether the following lines are included in: " + descendant.name.underscore + "_spec.rb").colorize(:light_blue)
-          puts ('#'*100).colorize(:light_blue)
-          puts final_text
-          puts "\n\n"
-        end
-      else
-        check_if_spec_folder_exists
-
-        unless Dir.exists? Rails.root.join("spec/serializers")
-          puts "Generating spec/serializers directory".colorize(:yellow)
-          Dir.mkdir(Rails.root.join("spec/serializers"))
-        end
-
-        path = "spec/serializers/#{descendant.name.underscore}_spec.rb"
-        puts "Producing serializer spec file for: #{path}".colorize(:green)
-        f = File.open("#{Rails.root.join(path)}", 'wb+')
-        f.write(final_text)
-        f.close
-      end
-    end
-
-    nil
-  rescue Exception => e
-    puts "Exception '#{e}' was raised. Skipping serializer specs production.".colorize(:red)
-  end
-
   def self.produce_specs_for_controllers
     Dir.glob(Rails.root.join('app/controllers/**/*.rb')).each do |x|
       require x
