@@ -305,67 +305,6 @@ module SpecProducer::SpecProductionModule
     puts "Exception '#{e}' was raised. Skipping job specs production.".colorize(:red)
   end
 
-  def self.produce_specs_for_controllers
-    Dir.glob(Rails.root.join('app/controllers/**/*.rb')).each do |x|
-      require x
-    end
-
-    controllers = ApplicationController.descendants
-    controllers << ApplicationController
-
-    controllers.each do |descendant|
-      path_name = 'app/controllers/' + descendant.name.split('::').map { |name| name.underscore }.join('/')
-
-      full_path = 'spec'
-      File.dirname(path_name.gsub('app/', 'spec/')).split('/').reject { |path| path == 'spec' }.each do |path|
-        unless /.*\.rb/.match path
-          full_path << "/#{path}"
-
-          unless Dir.exists? full_path
-            Dir.mkdir(Rails.root.join(full_path))
-          end
-        end
-      end
-
-      file_name = "#{path_name.gsub('app/', 'spec/')}_spec.rb"
-      final_text = "require '#{require_helper_string}'\n\n"
-      final_text << "describe #{descendant.name}, :type => :controller do\n"
-
-      descendant.action_methods.each do |method|
-        final_text << "  pending '##{method}'\n"
-      end
-
-      unless descendant.action_methods.size > 0
-        final_text << "  pending 'tests'\n"
-      end
-
-      final_text << "end\n"
-
-      check_if_spec_folder_exists
-
-      if File.exists?(Rails.root.join(file_name))
-        if File.open(Rails.root.join(file_name)).read == final_text
-          # nothing to do here, pre-existing content is the same :)
-        else
-          puts ('#'*100).colorize(:light_blue)
-          puts ("Please, check whether the following lines are included in: " + file_name).colorize(:light_blue)
-          puts ('#'*100).colorize(:light_blue)
-          puts final_text
-          puts "\n\n"
-        end
-      else
-        puts "Producing controller spec file for: #{file_name}".colorize(:green)
-        f = File.open(file_name, 'wb+')
-        f.write(final_text)
-        f.close
-      end
-    end
-
-    nil
-  rescue Exception => e
-    puts "Exception '#{e}' was raised. Skipping controller specs production.".colorize(:red)
-  end
-
   #######
   private
   #######

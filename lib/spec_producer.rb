@@ -110,7 +110,6 @@ module SpecProducer
   def self.produce_specs_for_all_types
     SpecProductionModule.produce_specs_for_routes
     SpecProductionModule.produce_specs_for_views
-    SpecProductionModule.produce_specs_for_controllers
     SpecProductionModule.produce_specs_for_mailers
     SpecProductionModule.produce_specs_for_jobs
 
@@ -127,12 +126,6 @@ module SpecProducer
     SpecProductionModule.produce_specs_for_views
 
     run_spec_tests 'views'
-  end
-
-  def self.produce_specs_for_controllers
-    SpecProductionModule.produce_specs_for_controllers
-
-    run_spec_tests 'controllers'
   end
 
   def self.produce_specs_for_mailers
@@ -205,7 +198,6 @@ module SpecProducer
       system 'bundle exec rake'
     else
       command = case type
-                  when 'controllers' then 'bundle exec rspec spec/controllers'
                   when 'views' then 'bundle exec rspec spec/views'
                   when 'mailers' then 'bundle exec rspec spec/mailers'
                   when 'jobs' then 'bundle exec rspec spec/jobs'

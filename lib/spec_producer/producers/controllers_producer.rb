@@ -11,7 +11,7 @@ module SpecProducer
 
       def call(resource)
         resource.obj.action_methods.each do |method_name|
-          builder.pending method_name
+          builder.pending "##{method_name}"
         end
       end
 
