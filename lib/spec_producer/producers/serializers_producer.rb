@@ -15,7 +15,7 @@ module SpecProducer
       end
 
       def call(resource)
-        builder.context('serializer tests') do
+        builder.context('includes the expected attribute keys') do
           builder.subject(builder.initialize_serializer_for_object resource.obj)
 
           builder.it("expect(subject.attributes.keys).to contain_exactly(#{resource.obj._attributes.map { |x| ":#{x.to_s}" }.join(', ')})")
