@@ -15,13 +15,13 @@ module SpecProducer
       end
 
       def call(resource)
-        builder.context('includes the expected attribute keys') do
+        builder.context('should include the expected attribute keys') do
           builder.subject(builder.initialize_serializer_for_object resource.obj)
 
           builder.it("expect(subject.attributes.keys).to contain_exactly(#{resource.obj._attributes.map { |x| ":#{x.to_s}" }.join(', ')})")
         end
 
-        builder.context('to_json') do
+        builder.context('to_json should have the proper values') do
           builder.subject(builder.json_parse_for_serialized_object resource.obj)
 
           resource.obj._attributes.each do |attribute|
