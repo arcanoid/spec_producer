@@ -189,55 +189,6 @@ module SpecProducer::SpecProductionModule
     puts "Exception '#{e}' was raised. Skipping view specs production.".colorize(:red)
   end
 
-  def self.produce_specs_for_helpers
-    helpers_list = ActionController::Base.modules_for_helpers(ActionController::Base.all_helpers_from_path 'app/helpers')
-
-    helpers_list.each do |helper|
-      file_name = "spec/helpers/#{helper.name.gsub("::", "/").underscore}_spec.rb"
-      full_path = 'spec'
-      file_name.gsub("spec/", "").split("/").each do |path|
-        unless /.*\.rb/.match path
-          full_path << "/#{path}"
-
-          unless Dir.exists? full_path
-            Dir.mkdir(Rails.root.join(full_path))
-          end
-        end
-      end
-
-      final_text = "require '#{require_helper_string}'\n\n"
-      final_text << "describe #{helper}, :type => :helper do\n"
-      helper.instance_methods.each do |method_name|
-        final_text << "  pending '#{method_name.to_s}'\n"
-      end
-
-      final_text << "end"
-
-      check_if_spec_folder_exists
-
-      if File.exists?(Rails.root.join(file_name))
-        if File.open(Rails.root.join(file_name)).read == final_text
-          # nothing to do here, pre-existing content is the same :)
-        else
-          puts ('#'*100).colorize(:light_blue)
-          puts ("Please, check whether the following lines are included in: " + file_name).colorize(:light_blue)
-          puts ('#'*100).colorize(:light_blue)
-          puts final_text
-          puts "\n\n"
-        end
-      else
-        puts "Producing helper spec file for: #{file_name}".colorize(:green)
-        f = File.open(file_name, 'wb+')
-        f.write(final_text)
-        f.close
-      end
-    end
-
-    nil
-  rescue Exception => e
-    puts "Exception '#{e}' was raised. Skipping helper specs production.".colorize(:red)
-  end
-
   def self.produce_specs_for_mailers
     files_list = Dir["app/mailers/**/*.rb"]
 

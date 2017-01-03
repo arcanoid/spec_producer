@@ -111,7 +111,6 @@ module SpecProducer
     SpecProductionModule.produce_specs_for_routes
     SpecProductionModule.produce_specs_for_views
     SpecProductionModule.produce_specs_for_controllers
-    SpecProductionModule.produce_specs_for_helpers
     SpecProductionModule.produce_specs_for_mailers
     SpecProductionModule.produce_specs_for_jobs
 
@@ -134,12 +133,6 @@ module SpecProducer
     SpecProductionModule.produce_specs_for_controllers
 
     run_spec_tests 'controllers'
-  end
-
-  def self.produce_specs_for_helpers
-    SpecProductionModule.produce_specs_for_helpers
-
-    run_spec_tests 'helpers'
   end
 
   def self.produce_specs_for_mailers
@@ -217,8 +210,6 @@ module SpecProducer
                   when 'mailers' then 'bundle exec rspec spec/mailers'
                   when 'jobs' then 'bundle exec rspec spec/jobs'
                   when 'routes' then 'bundle exec rspec spec/routes'
-                  when 'helpers' then 'bundle exec rspec spec/helpers'
-                  when 'models' then 'bundle exec rspec spec/models'
                   else 'bundle exec rspec'
                 end
 
