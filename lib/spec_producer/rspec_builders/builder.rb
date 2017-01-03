@@ -176,6 +176,7 @@ module SpecProducer
         expectation = args.shift
         if expectation
           add "it { #{expectation} }"
+          new_line
         else
           instance_eval(&block)
         end

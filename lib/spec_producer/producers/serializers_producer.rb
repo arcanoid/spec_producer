@@ -16,15 +16,16 @@ module SpecProducer
 
       def call(resource)
         builder.context('serializer tests') do
-          builder.subject { "#{resource.obj.name}.new(FactoryGirl.build(:#{resource.obj.name.underscore.gsub('_serializer', '')}))" }
-          builder.it { "expect(subject.attributes.keys).to contain_exactly(#{resource.obj._attributes.map { |x| ":#{x.to_s}" }.join(', ')})" }
+          builder.subject(builder.initialize_serializer_for_object resource.obj)
+
+          builder.it("expect(subject.attributes.keys).to contain_exactly(#{resource.obj._attributes.map { |x| ":#{x.to_s}" }.join(', ')})")
         end
 
         builder.context('to_json') do
-          builder.subject { "JSON.parse(#{resource.obj.name}.new(FactoryGirl.build(:#{resource.obj.name.underscore.gsub('_serializer', '')})).to_json)" }
+          builder.subject(builder.json_parse_for_serialized_object resource.obj)
 
-          resource.obj._attributes each do |attribute|
-            it { "expect(subject['#{attribute}']).to eq('')" }
+          resource.obj._attributes.each do |attribute|
+            builder.it("expect(subject['#{attribute}']).to eq('')")
           end
         end
       end

@@ -55,6 +55,18 @@ module SpecProducer
         new_line
       end
 
+      def json_parse_for_serialized_object(object)
+        "JSON.parse(#{object.name}.new(#{factory_build_for_object(object)}).to_json)"
+      end
+
+      def initialize_serializer_for_object(object)
+        "#{object.name}.new(#{factory_build_for_object(object)})"
+      end
+
+      def factory_build_for_object(object)
+        "FactoryGirl.build(:#{object.name.underscore.gsub('_serializer', '')})"
+      end
+
       def association_options_for(reflection)
         return if reflection.options.empty?
         options = []
