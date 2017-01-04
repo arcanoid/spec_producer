@@ -109,6 +109,33 @@ module SpecProducer
         new_line
       end
 
+      # Adds a before { render } block to buffer
+      #
+      # Example
+      #   
+      #   RspecBuilders::Based.build do |b|
+      #     b.before_render
+      #   end
+      #
+      #   Produces:
+      #     before do
+      #        render
+      #     end
+      #
+      def before_render
+        add "before do"
+        increase_intent
+        new_line
+
+        add "render"
+        new_line
+
+        decrease_intent
+        add 'end'
+        new_line
+        new_line
+      end
+
       # Adds a context or describe (alias) block for the spec.
       # the method is responsible to handle the intentation management 
       # (increase / decrease). 

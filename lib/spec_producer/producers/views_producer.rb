@@ -9,6 +9,7 @@ module SpecProducer
       end
 
       def call(resource)
+        builder.before_render
         builder.pending 'view content test'
       end
 
