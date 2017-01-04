@@ -13,6 +13,10 @@ module SpecProducer
         resource.obj.action_methods.each do |method_name|
           builder.pending "##{method_name}"
         end
+
+        if resource.obj.action_methods.size == 0
+          builder.pending 'controller tests'
+        end
       end
 
       #######
