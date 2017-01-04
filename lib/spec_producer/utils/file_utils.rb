@@ -26,7 +26,7 @@ module SpecProducer
           end
 
           path = "spec/#{context}/#{filename}_spec.rb"
-          puts "Producing model spec file for: #{path}".colorize(:green)
+          puts "Producing spec file for: #{path}".colorize(:green)
           f = File.open("#{Rails.root.join(path)}", 'wb+')
           f.write(final_text)
           f.close
