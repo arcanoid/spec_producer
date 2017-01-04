@@ -43,32 +43,46 @@ on  a rails project.
   bundle exec rake spec_producer:models
 ```
 
-```ruby
-SpecProducer.produce_specs_for_models
-```
-
 To produce all tests for routes, run:
 
 ```ruby
-SpecProducer.produce_specs_for_routes
+bundle exec rake spec_producer:routes
 ```
 
 To produce all spec files for views, run:
 
 ```ruby
-SpecProducer.produce_specs_for_views
+bundle exec rake spec_producer:views
 ```
 
 To produce all spec files for helpers, run:
 
 ```ruby
-SpecProducer.produce_specs_for_helpers
+bundle exec rake spec_producer:helpers
 ```
 
 To produce all spec files for controllers, run:
 
 ```ruby
-SpecProducer.produce_specs_for_controllers
+bundle exec rake spec_producer:controllers
+```
+
+To produce all spec files for jobs, run:
+
+```ruby
+bundle exec rake spec_producer:jobs
+```
+
+To produce all spec files for mailers, run:
+
+```ruby
+bundle exec rake spec_producer:mailers
+```
+
+To produce all spec files for serializers, run:
+
+```ruby
+bundle exec rake spec_producer:serializers
 ```
 
 Additionally this gem (from version 0.2.0) allows users to print all their missing spec files by reading all 
@@ -77,31 +91,55 @@ directories for Views, Models, Controllers and Helpers.
 To print all types of missing tests, run:
 
 ```ruby
-SpecProducer.print_all_missing_spec_files
+rake missing_specs_printer:all
 ```
 
 To print all missing model tests, run:
 
 ```ruby
-SpecProducer.print_missing_model_specs
+rake missing_specs_printer:models
 ```
 
 To print all missing controller tests, run:
 
 ```ruby
-SpecProducer.print_missing_controller_specs
+rake missing_specs_printer:controllers
 ```
 
 To print all missing helper tests, run:
 
 ```ruby
-SpecProducer.print_missing_helper_specs
+rake missing_specs_printer:helpers
 ```
 
 To print all missing view tests, run:
 
 ```ruby
-SpecProducer.print_missing_view_specs
+rake missing_specs_printer:views
+```
+
+To print all missing job tests, run:
+
+```ruby
+rake missing_specs_printer:jobs
+```
+
+To print all missing mailer tests, run:
+
+```ruby
+rake missing_specs_printer:mailers
+```
+
+To print all missing route tests, run:
+
+```ruby
+rake missing_specs_printer:routes
+```
+
+To print all missing serializer tests, run:
+
+```ruby
+rake missing_specs_printer:serializers
 ```
 
 ## Development
