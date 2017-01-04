@@ -21,14 +21,13 @@ module SpecProducer
           route_specifics = { :controller => route[:controller], 
                               :action => route[:action] }
 
-
           route[:path].gsub(/\(.*?\)/, '').scan(/:[a-zA-Z_]+/).flatten.each do |parameter|  
             route_specifics[parameter.gsub(':','')] = "#{parameter.gsub(':','').upcase}"
           end
           
           route_requested = route[:path].gsub(/\(.*?\)/, '').gsub(/:[a-zA-Z_]+/){ |param| param.gsub(':','').upcase }
 
-          builder.it("expect(:#{route[:verb]} => '#{route_requested}').to route_to(#{route_specifics})")
+          builder.it("expect(:#{route[:verb]} => '#{route_requested}').to route_to(#{route_specifics.map { |k,v| ":#{k} => '#{v}'"}.join(', ')})")
         end
         end
       end
