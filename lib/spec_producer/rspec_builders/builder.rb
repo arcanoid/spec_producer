@@ -60,6 +60,8 @@ module SpecProducer
 
         if type == 'routing'
           add "describe '#{klass} routes', type: :#{type} do"
+        elsif type == 'view'
+          add "describe '#{klass}', type: :#{type} do"
         else
           add "describe #{klass}, type: :#{type} do"
         end
