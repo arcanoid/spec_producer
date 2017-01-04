@@ -25,6 +25,18 @@ module SpecProducer
             Dir.mkdir(Rails.root.join("spec/#{context}"))
           end
 
+          full_path = 'spec'
+          File.dirname("spec/#{context}/#{filename}_spec.rb").split('/').reject { |path| path == 'spec' }.each do |path|
+            unless /.*\.erb/.match path
+              full_path << "/#{path}"
+
+              unless Dir.exists? full_path
+                puts "Generating #{full_path} directory".colorize(:yellow)
+                Dir.mkdir(Rails.root.join(full_path))
+              end
+            end
+          end
+
           path = "spec/#{context}/#{filename}_spec.rb"
           puts "Producing spec file for: #{path}".colorize(:green)
           f = File.open("#{Rails.root.join(path)}", 'wb+')
