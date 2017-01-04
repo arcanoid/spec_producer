@@ -88,7 +88,12 @@ module SpecProducer
           end
 
           # Footer / Fils Close etc
-          Utils::FileUtils.try_to_create_spec_file(resource.type.pluralize, resource.name.underscore, builder)
+          if resource.type == 'routing'
+            Utils::FileUtils.try_to_create_spec_file(resource.type, "#{resource.name}_routing", builder)
+          else
+            Utils::FileUtils.try_to_create_spec_file(resource.type.pluralize, resource.name.underscore, builder)
+          end
+
           builder.flush!
         end
 

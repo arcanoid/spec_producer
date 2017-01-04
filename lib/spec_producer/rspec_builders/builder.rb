@@ -57,7 +57,12 @@ module SpecProducer
       #
       def spec(klass, type, &block)
         new_line
-        add "describe #{klass}, type: :#{type} do"
+
+        if type == 'routing'
+          add "describe '#{klass} routes', type: :#{type} do"
+        else
+          add "describe #{klass}, type: :#{type} do"
+        end
 
         increase_intent
         new_line
