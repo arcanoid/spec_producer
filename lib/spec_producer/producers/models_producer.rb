@@ -6,7 +6,8 @@ module SpecProducer
       prepend Base
 
       # TODO Rethink this
-      CLASSES_TO_IGNORE = ['ActiveRecord::SchemaMigration', 'ApplicationRecord',
+      CLASSES_TO_IGNORE = ['ActiveRecord::SchemaMigration', 
+                           'ApplicationRecord',
                            'Delayed::Backend::ActiveRecord::Job',
                            'ActiveRecord::InternalMetadata']
 
