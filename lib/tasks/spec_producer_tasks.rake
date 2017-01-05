@@ -4,6 +4,11 @@ namespace :spec_producer do
     SpecProducer.produce(only: :controllers)
   end
 
+  desc 'Produces FactoryGirl factory files for each model'
+  task :factories => :environment do
+    SpecProducer.produce_factories
+  end
+
   desc 'Produces helper specs files'
   task :helpers => :environment do
     SpecProducer.produce(only: :helpers)
