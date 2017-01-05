@@ -9,6 +9,11 @@ namespace :spec_producer do
     SpecProducer.produce_factories
   end
 
+  desc 'Checks if there are any of the suggested gems for testing missing from your Gemfile and adds them'
+  task :set_up_necessities => :environment do
+    SpecProducer.set_up_necessities
+  end
+
   desc 'Produces helper specs files'
   task :helpers => :environment do
     SpecProducer.produce(only: :helpers)
