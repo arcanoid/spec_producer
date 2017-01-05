@@ -1,3 +1,9 @@
+## 0.13.0 (2017-01-05)
+
+Features:
+* Major refactoring on how specs are produced (some previous functionality may not be supported here)
+* Add rake tasks for each functionality supported
+
 ## 0.12.0 (2016-11-8)
 
 Features:
