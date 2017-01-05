@@ -85,61 +85,67 @@ To produce all spec files for serializers, run:
 bundle exec rake spec_producer:serializers
 ```
 
+In case you have factory_girl gem installed, to produce a list of sample factory files for your models, run:
+
+```ruby
+bundle exec rake spec_producer:factories
+```
+
 Additionally this gem (from version 0.2.0) allows users to print all their missing spec files by reading all 
-directories for Views, Models, Controllers and Helpers.
+directories for Views, Models, Controllers, Helpers etc.
 
 To print all types of missing tests, run:
 
 ```ruby
-rake missing_specs_printer:all
+bundle exec rake missing_specs_printer:all
 ```
 
 To print all missing model tests, run:
 
 ```ruby
-rake missing_specs_printer:models
+bundle exec rake missing_specs_printer:models
 ```
 
 To print all missing controller tests, run:
 
 ```ruby
-rake missing_specs_printer:controllers
+bundle exec rake missing_specs_printer:controllers
 ```
 
 To print all missing helper tests, run:
 
 ```ruby
-rake missing_specs_printer:helpers
+bundle exec rake missing_specs_printer:helpers
 ```
 
 To print all missing view tests, run:
 
 ```ruby
-rake missing_specs_printer:views
+bundle exec rake missing_specs_printer:views
 ```
 
 To print all missing job tests, run:
 
 ```ruby
-rake missing_specs_printer:jobs
+bundle exec rake missing_specs_printer:jobs
 ```
 
 To print all missing mailer tests, run:
 
 ```ruby
-rake missing_specs_printer:mailers
+bundle exec rake missing_specs_printer:mailers
 ```
 
 To print all missing route tests, run:
 
 ```ruby
-rake missing_specs_printer:routes
+bundle exec rake missing_specs_printer:routes
 ```
 
 To print all missing serializer tests, run:
 
 ```ruby
-rake missing_specs_printer:serializers
+bundle exec rake missing_specs_printer:serializers
 ```
 
 ## Development
