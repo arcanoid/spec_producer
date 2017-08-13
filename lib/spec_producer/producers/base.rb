@@ -77,7 +77,7 @@ module SpecProducer
 
       def call
         raise(NotImplementedError.new('Abstract method.')) unless defined?(super)
-        warn "No resources available" if resources.empty?
+        warn "No resources available for #{self.type}" if resources.empty?
 
         resources.each do |resource|
           builder.build do |b|
