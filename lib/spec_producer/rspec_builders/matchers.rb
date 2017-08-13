@@ -94,7 +94,6 @@ module SpecProducer
       def responds_to(*args)
         args = args.map!{ |arg| ":#{arg.gsub(":", '')}" }.split.join(',')
         it "is_expected.to respond_to(#{args})"
-        new_line
       end
 
       # provides a should_be_* matchers
@@ -136,7 +135,6 @@ module SpecProducer
       #
       def validates_with(kind, attr)
         it "is_expected.to validate_#{kind}_of(:#{attr})"
-        new_line
       end
 
       # Combine the methods below to add an Rspec like
@@ -158,7 +156,6 @@ module SpecProducer
       end
       def to actual
         it "expect(#{@_expected}).to eq(#{actual})"
-        new_line
       end
       def eq(value)
         value
@@ -175,7 +172,6 @@ module SpecProducer
       def should_validate_presence_of(name)
         expectation = M(:presence)[name]
         it(expectation)
-        new_line
       end
       alias_method :validates_presence_of, :should_validate_presence_of
 
@@ -190,7 +186,6 @@ module SpecProducer
       def should_belong_to(name)
         expectation = M(:belong_to)[name]
         it(expectation)
-        new_line
       end
 
       # Should have one shoulda matcher producer
@@ -204,7 +199,6 @@ module SpecProducer
       def should_have_one(name)
         expectation = M(:have_one)[name]
         it(expectation)
-        new_line
       end
 
       # have_many shoulda matcher expectation
@@ -218,7 +212,6 @@ module SpecProducer
       def should_have_many(name)
         expectation = M(:has_many)[name]
         it(expectation)
-        new_line
       end
       alias_method :has_many, :should_have_many
 
@@ -233,7 +226,6 @@ module SpecProducer
       def has_db_column(name)
         expectation = M(:db_column)[name]
         it(expectation)
-        new_line
       end
 
       # Factories spec producer
@@ -249,7 +241,6 @@ module SpecProducer
       #
       def has_valid_factory(name)
         it "expect(FactoryGirl.build(:#{name})).to be_valid"
-        new_line
       end
     end
   end
