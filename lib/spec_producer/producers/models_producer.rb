@@ -32,7 +32,7 @@ module SpecProducer
         end
 
         if has_validators?(resource.obj)
-          builder.context 'validations' do
+          builder.context 'Validations' do
             resource.obj.validators.each do |validator|
               validator.attributes.each do |attribute|
                 builder.validates_with validator.kind, attribute
@@ -41,7 +41,7 @@ module SpecProducer
           end
         end
 
-        builder.context 'factories' do
+        builder.context 'Factories' do
           builder.it { has_valid_factory(resource.obj.name.underscore) }
         end
 
